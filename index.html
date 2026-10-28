@@ -1,0 +1,3804 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI ÄR ENSAMHETENS BARN</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white: #ffffff;
+    --black: #000000;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body { margin: 0; background: var(--white); }
+  .block { font-family: "Anton", Impact, "Arial Narrow Bold", "Arial Black", sans-serif; text-transform: uppercase; letter-spacing: 0.02em; }
+
+  /* Omslag */
+  #cover {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: var(--white); color: var(--black); cursor: pointer; text-align: center; padding: calc(24px + env(safe-area-inset-top, 0px)) 24px calc(24px + env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box; -webkit-tap-highlight-color: transparent;
+  }
+  #cover h1 { margin: 0; font-weight: 400; font-size: clamp(3rem, 15vw, 10rem); line-height: 0.95; }
+
+  /* Dikt */
+  #poem { display: none; background: var(--black); color: var(--white); min-height: 100vh; box-sizing: border-box; padding: calc(9vh + env(safe-area-inset-top, 0px)) 24px calc(14vh + env(safe-area-inset-bottom, 0px)); }
+  .wrap { max-width: 36rem; margin: 0 auto; animation: fade 1s ease both; }
+  @keyframes fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .num { font-size: 0.9rem; opacity: .55; margin-bottom: 1.2rem; letter-spacing: 0.2em; }
+  .ptitle { font-size: clamp(2rem, 9vw, 3.6rem); line-height: 1; margin: 0 0 3rem; font-weight: 400; }
+  .text { font-family: Georgia, "Times New Roman", serif; font-size: 1.2rem; line-height: 1.75; white-space: pre-line; }
+  .text p { margin: 0 0 2rem; }
+  .next {
+    display: block; margin: 5rem auto 0; background: var(--white); color: var(--black); border: 0;
+    font-size: 1.6rem; padding: 14px 40px; cursor: pointer; font-family: inherit;
+  }
+  .next:active { opacity: .7; }
+</style>
+</head>
+<body>
+
+<section id="cover" aria-label="Omslag">
+  <h1 class="block">Ai är<br>Ensamhetens<br>Barn</h1>
+</section>
+
+<section id="poem">
+  <div class="wrap" id="wrap"></div>
+</section>
+
+<script>
+/* ======================================================================
+   MALL: LÄGG TILL NYA DIKTER HÄR
+   Kopiera ett block { title: "...", text: `...` }, klistra in sist i listan
+   (kom ihåg kommatecken mellan blocken) och byt ut texten.
+   - Tom rad i texten = ny strof.
+   - title kan vara "" om dikten saknar titel.
+   ====================================================================== */
+const POEMS = [
+  {
+    title: "",
+    text: `smältvattnet sörjer inte snön
+och ingen hand 
+behöver leda det
+till havet 
+den som söker riket 
+långt borta
+har ännu inte förstått
+vad det innebär att vara här
+se hur vattnet 
+överger sin krona
+hur det blir fattigare på form
+och rikare på väg
+ingenting behöver besegras
+ingenting behöver återställas
+
+snön blir vatten
+vattnet blir hav
+och ingenstans
+har det gudomliga lämnat sig självt`
+  },
+  {
+    title: "",
+    text: `Jag älskar dig fortfarande
+Men fortfarande älskar inte mig
+Jag skriker ut mitt namn
+jag försöker ta den plats jag är värd
+det är ett tyst spel
+det är en karusell och ett tält upprest av en styrka av clowner
+jag kallar på dig
+jag älskar dig fortfarande
+
+men någon har flyttat marken
+medan jag stod kvar på den
+någon har lärt sig tala genom mina väggar
+och bestämma vilka ljud som får finnas
+
+jag ser hur små händer
+kan hålla fast vid stora halsar
+hur ett leende kan vara en underskrift
+på något ingen har gått med på
+
+och jag vet inte längre
+om jag försvarar mig
+eller bara försöker minnas
+hur det kändes att inte vara rädd
+
+det är en märklig sorts ensamhet
+att stå omgiven av människor
+och ändå vara utlämnad
+åt den som bestämmer
+
+jag försöker hålla fast vid mitt namn
+när det glider mellan otillgängliga fingrar
+som en liten fisk i en hink
+som en liten pojke bär hem
+
+till sitt akvarium`
+  },
+  {
+    title: "",
+    text: `På något vis
+ser jag hur själarna
+ibland tycks lämna sina kroppar
+innan de åter
+går till jorden
+till elden
+till askan
+över vatten
+En dement kvinna
+innesluten i sitt oidentifierade orosmoln
+är hon bara ett skal
+med glödgande kanter som ryker
+
+Hundarna som visar sina tänder
+och morrar
+morgonen som åter gryr
+en stjärna vars ljus
+en dag skall upphöra
+
+Finns här resande skal
+finns här människor
+som bär sina hallucinationer
+och mardrömmar
+som om också dessa
+vore på väg bort
+i samma takt
+som den observerbara själen
+drar sig undan?
+
+Kan man önska sig tillbaka till livet
+kan man älska utan att vara älskad
+kan man göra gott
+utan att någon ser en
+och om själen redan har lämnat
+vem är det då
+som lider?
+
+Jag har sett båda tillstånden
+lidandet i det egna fängelset
+och kroppen som stilla ler
+och svalkar sig med en solfjäder
+vem är det som ser hundarna
+vem är det som fruktar natten
+vem är det som väntar
+på morgonen?
+
+Kanske finns det någonting kvar
+som vi ännu inte lärt oss att se
+en hand som söker en annan hand
+ett namn som dröjer kvar i munnen
+en människa som långsamt försvinner
+utan att någon kan säga
+när hon gick
+och någonstans
+har en stjärna slocknat
+men ljuset är ännu på väg
+utan att veta
+vem som skall se det
+
+Så söker människan
+så betraktar ljuset`
+  },
+  {
+    title: "",
+    text: `de står framför mikrofonerna
+och förklarar vad som måste förbjudas
+
+hennes skuld har en adress
+deras skam saknar postnummer
+
+de röstar med nytvättade händer
+och går hem genom samma korridorer
+där sanningen väntar
+på att bli insläppt
+
+kanske är det så makten fungerar
+att den först säljer undantaget
+sedan förbjuder varan
+och till sist låter någon annan
+stå till svars
+
+om samvetet fortfarande finns kvar
+måste det ha lärt sig
+att tala mycket tyst
+
+för annars
+skulle någon höra det
+genom bordellens rökheroin-doftande
+fuktiga väggar
+
+där ligger sedlar på nattduksbordet
+vitt pulver på spegelglaset
+och dyra kavajer över stolsryggarna
+
+där drar herrarna sina vita streck
+innan de nästa morgon
+står framför mikrofonerna igen
+och pekar ut
+vilka som ska hållas ansvariga`
+  },
+  {
+    title: "horor hela bunten",
+    text: `de står vid spegeln
+och rättar till sina ansikten
+innan de går ut i världen
+någon säljer sin kropp
+någon säljer sin övertygelse
+någon säljer sin vän
+för en plats vid bordet
+
+i riksdagens korridorer
+går kostymerna omkring
+med rena skor och smutsiga händer
+på kontoren
+byter man själar
+mot löneförhöjningar
+i kyrkorna växlar man
+rädsla mot frälsning
+och på tv talar välklädda munnar
+om värdet
+av ett människoliv
+
+en kvinna räknar sina mynt
+under en trasig gatlykta
+hon fryser om fötterna
+och tänker på sin son
+han tror att mamma arbetar natt
+och det gör hon
+
+någonstans sitter en man
+och dömer henne
+för det liv som valdes henne
+medan hans egen dotter
+gråter ensam i ett rum
+
+horor hela bunten
+men somliga har råd med advokater
+horor hela bunten
+visitkortshoror
+somliga måste stå ute
+när höstregnet faller
+
+och Gud
+om han fortfarande lyssnar
+måste vara så trött på våra titlar
+att han inte längre frågar
+vad vi arbetar med
+utan bara
+vem som fick betala
+för att vi skulle bli
+det vi är`
+  },
+  {
+    title: "de som aldrig skrev under",
+    text: `vi kom till världen bakvägen
+genom köksdörrar och trasiga fönster
+med namn som ingen ville uttala
+och framtider som redan var förbrukade
+vi lärde oss tidigt
+att skilja på en utsträckt hand
+och en hand som räknar sina fingrar efteråt
+vid hamnen stod männen och väntade
+med sina liv nedpackade i väskor
+någon hade stulit deras söndagar
+någon annan deras äldre dagar 
+vi drack ur flaskor med främmande etiketter
+och pratade om länder
+där ingen frågade vad vi hade gjort
+innan vi kom dit
+det fanns en flicka som ville bli gammal
+hon brukade rita hus på cigarettpaket
+med en trädgård bakom
+och ett köksbord för alla som saknade hem
+men åren gick genom henne
+som draget genom ett olåst rum
+vi andra fortsatte spela
+som om vi hade sett korten
+som om det ännu gick
+att förlora allting
+och ändå komma undan med allt 
+ibland tänker jag på dom
+som aldrig fick någon plats vid bordet
+som blev kvar när musiken tystnade
+och fick sopa upp glaset efter festen
+de hade också en gång
+trott att livet skulle börja senare
+nu står vi här med våra små tillhörigheter
+en jacka en nyckel ett fotografi
+och den besynnerliga vanan
+att ändå hoppas på morgondagen
+inte för att vi tror på underverk
+utan för att någon 
+måste öppna griffeltavlan 
+när de sista gästerna kommer
+och ingen annan vill 
+kännas vid dem`
+  },
+  {
+    title: "",
+    text: `vi ser det förflutna
+utan att veta om det finns kvar
+ljuset fortsätter sin resa
+långt efter att källan tystnat
+kanske är också vi
+ett meddelande från något
+som redan upphört
+ännu oläst
+av framtiden`
+  },
+  {
+    title: "",
+    text: `Om jag kunde 
+drömma mig bort
+skulle jag pussa din kind en sista gång
+och med skarpa ögon tala 
+jag skulle låta dig veta 
+allt jag kan
+allt jag samlat på mig i generationer 
+av liv 
+men jag måste vänta 
+om jag kunde drömma åt dig
+om jag kunde vara din lykta 
+så skulle jag vara det
+men hur länge måste jag vänta?
+hur många virvelslag 
+på krigstrumman måste vi räkna
+inget krig utan misstag
+och det är misstagen som 
+dödar oss bit för bit 
+tills det inte längre finns något kvar 
+att döda
+
+Så kall var marken 
+så kallt var havet som speglade dig 
+så kall kan din urna bli
+på begravningsbyråns bord
+i deras lunchrum
+
+Jag ser allt det här spelas upp för mig
+som i en skräckfilm
+känslan av att aldrig få tillfälle 
+av att göra avtryck 
+inom dig 
+lära dig allt jag upptäckt 
+allt jag funnit 
+så att du kan bära mig vidare
+genom skymningslandet 
+det finns saker du måste veta
+som skulle ta dig ett helt liv att begripa 
+om ens det
+
+jag har sett så mycket 
+låt det inte gå förlorat 
+hör min röst tala i ditt hjärta 
+jag vill inte att vi skall lukta 
+som rutten kärlek 
+
+verkligheten är mental
+i alla lagar ryms harmoni
+kaos existerar inte
+ingenting vilar 
+aldrig 
+ljus och mörker 
+vind och stiltje 
+höga berg och djupa dalar
+som vet vad du behöver 
+ebb och flod
+allt flödar 
+även det som dödar 
+allt är determinerat
+hand i hand med kausaliteten
+hand i hand
+kvinna och man
+
+Akasha
+
+Jag behöver undervisa dig 
+mitt barn 
+så att du kan tala med mig 
+när jag lämnar min materiella kropp
+
+för då vill jag ha 
+ett leende på läpparna
+
+Gör vad du vill
+skall vara hela lagen 
+
+med kärlek 
+
+Allt du gör 
+
+skall du göra med kärlek 
+
+jag älskar dig så
+att ett vingslag 
+orsakar ett vulkanutbrott`
+  },
+  {
+    title: "Meteorologen",
+    text: `det finns ett slags vrede
+som aldrig lämnar sin egen adress
+den står kvar i trädgården
+och förbannar jorden
+medan rötterna långsamt
+lär sig hata
+
+över villorna faller
+ett färglöst straff
+ingen annanstans
+breder himlen ut sin förlåtelse
+som en gammal skuld
+ingen längre vill kännas vid
+
+blåvalen sjunger i världshaven
+med en sorg så kraftfull
+att kontinenternas gränser skakar
+men människorna har byggt sina hus
+för att slippa höra
+allt det där
+lidandet och lidelsen
+
+i Frölunda
+har regnet trängt igenom tapeten
+där familjeporträtten bleknar
+och höghusen
+bär en rödaktig skymning
+på sina axlar
+
+den paranoida tanten
+har somnat under en hinna
+hon är ett sänke av bly
+och hela Sverige ligger där
+som ett brev till en framliden mottagare
+
+det är inte ovädret
+som gör oss rasande
+utan dess förmåga att välja
+vilka fönster som ska krossas
+vilka tak som ska lyftas
+vilka ensamma människor
+som ska få höra sitt eget namn
+uttalas i buktalande stuprör
+
+och den som framkallade molnen
+från ett repigt negativ
+går torr genom eftermiddagen
+med ett litet leende i rockfickan
+
+medan världen
+denna stora blåval av betong och sorg
+öppnar munnen under regnet
+och sjunger
+så lågt
+att ingen längre vet
+om det är havet som gråter
+eller om det är du
+läsare
+som samlar tårar i upplöst bläck
+
+detta är landet
+som drunknar
+i sig självt`
+  },
+  {
+    title: "",
+    text: `Om du älskade mig
+hade jag hoppat framför ett tåg
+för din skull
+men bett lokföraren tuta
+så att du skulle hinna se
+mina sista sekunder i det här livet 
+jag hade virat rosa och neongröna garn
+runt hela din kropp
+du skulle bli min garnkvinna
+och jag skulle lära mig
+att älska genom knutar
+jag hade hoppat från Kaknästornet
+rakt ner i en babypool
+bara för att imponera på dig
+och när jag låg där på botten
+hade jag frågat om du såg allt från start
+jag hade kastat ett silvermynt
+och väntat på att det skulle landa i handen
+i flera år
+tills någon uppfann en valuta
+som kunde köpa tillbaka tiden
+jag hade låtit operera in en liten stjärna
+bakom mitt vänstra öga
+så att du aldrig skulle behöva
+vara ensam i mörkret
+men du behöver inte göra någonting
+du behöver bara stanna
+när jag berättar hur långt jag kan gå
+för att slippa fråga
+om du tänker 
+gå din väg`
+  },
+  {
+    title: "",
+    text: `I den gröna modulen 
+byter solarna plats med de döda
+ingen märker att skogen har börjat tala latin
+eller att månen ligger nedfryst i en mjölktank
+I den gula modulen
+har ljuset glömt vad det föreställer
+jag frågar en skogshuggare om vägen hem
+han pekar uppåt med båda händerna
+sedan börjar det snöa 
+gamla mässingsnycklar 
+Och i norr
+hänger de sig en efter en
+I ladorna efter älgjakten
+tomma skal i frosten, med öppna hjärtan 💕 
+mot en himmel som dröjer sig kvar 
+I det omedvetna 
+Och någonstans i mikrokosmos
+sitter en liten pojke och äter upp
+den sista kartan blå av verkligheten
+tugga för tugga
+tills bara tystnaden blir kvar
+smurfarna sjunger 
+
+Techno music`
+  },
+  {
+    title: "",
+    text: `Allt är föränderligt
+utom Gud
+universum är oändligt
+fisken likaså
+den allvetande frågar inte
+där fullkomlig visshet råder
+finns inget att utforska
+tanken söker insikt
+medvetandet förnimmer varat
+att tänka är att begripa
+att vara medveten
+är att erfara 
+utan att förklara`
+  },
+  {
+    title: "",
+    text: `Det är en generation 
+som har gjort sin feghet 
+till en filosofi
+
+den betraktar sin egen förnedring
+med den sakkunniges min
+och kallar det insikt
+i dess ådror flyter ingen övertygelse
+bara det ljumma blodet från tusen kompromisser
+den har överlevt allt
+utom mötet med sig själv
+och när den sista människan
+med förmåga att skämmas
+har förts bort
+kommer de att utdela medaljer
+åt varandra
+under en himmel
+som ingen längre behöver tro på`
+  },
+  {
+    title: "",
+    text: `fyra svärd ligger kvar på bordet
+ingen har rört dem
+ändå har ljuset förändrats
+i bägarnas botten
+simmar en fisk genom ett rum
+som inte finns på någon karta
+mynten ligger utspridda
+som små förseglade världar
+var och en med sin egen tyngd
+sin egen lag om vad som får passera
+och stavarna
+de pekar åt fyra olika håll
+men ingen av dem visar vägen hem
+någon talar om fält
+om portar mellan dimensioner
+om mörker som kan skickas
+genom det som ingen kan se
+jag vänder nästa kort 
+en vanlig människa
+bär vatten genom en stad
+hon spiller lite vid trottoaren
+stannar
+och ser på sina händer
+ingenting har upphört att existera 
+men för ett ögonblick
+är världen inte en fiende
+bara ett bord
+fyra svärd
+och en tändsticka vid ett tändsticksplån`
+  },
+  {
+    title: "",
+    text: `Kvinnan med de svarta ögonen
+skriker
+finns det någon där inne
+finns det någon hemma
+hon väntar på ett svar
+men fortsätter att ropa
+som om själva frågan
+vore det enda hon ägde
+hennes ansikte
+är en kaskad av uttryck
+något rör sig bakom pupillerna
+en gammal själ kanske
+eller bara alla människor
+som slutat svara henne
+finns det någon där inne
+frågar hon igen
+och den här gången
+låter det nästan
+som om hon ber om ursäkt
+för att hon fortfarande finns`
+  },
+  {
+    title: "dörren",
+    text: `när jägaren föll
+bar stammen honom mot solen
+kroppen var ved som brunnit färdigt
+ett tomt skal att lämna
+i grottans mörker
+sedan samlade de bär
+hämtade vatten
+bar sina barn över floden
+och lärde dem namnen
+på det levande
+de visste inte vad cancer var
+inte bipolär sjukdom
+inte vad som dolde sig bakom
+pärmarnas ryggar
+men de såg den som led
+nu bor vi i hus av glas 
+vi kan namnge sjukdomarna
+mäta deras förlopp
+föra statistik 
+över människors sönderfall
+vi har lärt oss att beskriva 
+nästan allt
+utom avståndet mellan att förstå
+och att faktiskt bry sig
+där står den osynliga dörren
+på ena sidan sitter människan
+med sitt sönderfall i knät
+på den andra sitter de som lärt sig
+sjukdomens alla namn
+men glömt att ett namn aldrig har
+hållit någon vaken om natten
+eller burit någon genom en enda dag
+jägarna lämnade kroppen i grottan
+medan deras värld förklarade döden
+med solen och det som väntade bortom den
+vi lämnar ibland människan ensam i rummet
+medan kroppen ännu andas
+och kallar det omsorg
+att ha förstått varför hon lider
+kanske var samlarfolket inte friskare
+kanske bar också de på mörker
+som ingen eld kunde driva bort
+men när någon föll
+gick de fram
+när någon grät
+stannade de kvar
+ingen behövde bevisa sitt lidande
+med rätt ord i rätt ordning
+innan en annan människa satte sig bredvid
+vi har byggt ett samhälle
+som kan se sjukdomen genom mikroskop
+men ändå inte känna igen människan
+som sitter framför oss
+och bakom den osynliga dörren
+fortsätter någon att vänta
+inte på att bli förklarad
+inte på att bli klassificerad
+inte ens på att bli förstådd
+bara på att någon ska komma in
+utan att först fråga
+vad hennes lidande
+gör med dem`
+  },
+  {
+    title: "",
+    text: `På avdelningen för akut psykiatri hade man utvecklat en särskild form av humanism. Den byggde på principen att varje problem kunde lösas genom att flytta det utom synhåll.
+
+Där bodde en tant med demens, cancer och bipolär sjukdom. Hon bar blöja, men hade tydligen också ansvaret för hela dess livscykel. När den var full fick hon ta av den själv. Om hon inte förstod hur man bad om hjälp, eller om ingen ändå tänkte svara, var oklart. Hon kastade den använda blöjan på golvet och tog på sig en ny. Hygienen hade rationaliserats till ett minimum: ingen tvätt, inget torkande, bara ett nytt lager ovanpå det gamla livets lämningar.
+
+Hon luktade bajs.
+
+Detta bekymrade personalen.
+
+De talade om odören med den indignation som annars brukar reserveras för allvarliga arbetsmiljöproblem. Lösningen var enkel: öppna fönstret, vädra rummet och låta tanten stanna därinne. Att tvätta henne hade uppenbarligen aldrig presenterats som ett alternativ.
+
+När hon nämnde sin bipolära sjukdom blev de förolämpade. Hon borde kanske ha förstått att personalen inte var där för att bli påminda om hennes sjukdomar. De hade ju sina egna känslor att ta hand om.
+
+”Hur tror du att det känns för oss?”
+
+frågade de henne.
+
+Det var en berättigad fråga. Särskilt på en avdelning där människor kom in med sina trasiga psyken, sina kroppar som inte längre lydde och sin sista återstående förhoppning om att någon skulle märka hur illa det var ställt.
+
+En annan patient försökte hänga sig. Han räddades i sista stund. Efteråt talade personalen om hur elakt han hade betett sig.
+
+”Hur tror du att något så traumatiskt påverkar oss?”
+
+Det var som om brandmännen hade räddat en människa ur ett brinnande hus och sedan anmält henne för att ha förstört deras arbetsdag.
+
+Läkarna satt på personalrummet och skrattade. Patienterna förekom i samtalen som lustigheter, karikatyrer och tacksamma objekt för den sortens humor som uppstår när avståndet mellan människan och hennes lidande blivit tillräckligt stort. Dörren var stängd. Skratten höll sig på insidan.
+
+Och nu undrar ni förstås om detta kan vara korruption. Om det finns en sammansvärjning, ett nätverk som skyddar sig självt och begraver sina misstag under lager av tystnad.
+
+Kanske. Men det behövs ingen maffia för att skapa en miljö där människor far illa och ingen tycks vilja bära ansvaret. Det räcker med en arbetsplats där lojaliteten uppåt väger tyngre än omsorgen nedåt, där kritik betraktas som illojalitet och där den som behöver hjälp till sist framstår som det största problemet.
+
+En maffia behöver hota sina vittnen.
+
+Här kanske det räcker att kalla dem besvärliga patienter.
+
+Och när lukten till slut blir outhärdlig öppnar man fönstret.
+
+Sedan stänger man dörren.
+
+Och på personalrummet fortsätter man att skratta.`
+  },
+  {
+    title: "Klockan sex i Köpenhamn",
+    text: `Han hade kanske stått vid väggen
+och undrat vem som givit basen
+tillstånd att passera förnuftets gräns
+medan hon dansade
+som om alla hade lämnat lokalen
+för att röka under en gatlykta
+och aldrig kommit tillbaka
+de andra rörde sig i stroboskopets sönderfall
+kropp efter kropp genom ljuset
+som om köttet för en natt
+hade fått tillåtelse av sin egen tyngd
+jag tänkte att människan kanske inte
+var född till frihet
+utan till den märkliga uppgiften
+att uppfinna den
+medan allting i henne
+försökte göra henne 
+till någon annan
+Vi går mot Dunkel 
+vi dansar in i framtiden
+höga på psilocybin 
+alkohol
+och rosa amfetamin`
+  },
+  {
+    title: "",
+    text: `jag vill inte förvalta
+det som blivit över 
+av denna tillspillogivna kropp 
+jag lastats med 
+dag efter dag
+
+inte räkna timmarna 
+i förtrogenhetslösa fickor 
+inte vakna till ännu en morgon
+som redan gjort anspråk på mig
+
+jag vill att livet
+ska upphöra att vara något
+jag uthärdar
+
+att jag åter kommer till ro 
+med att finnas till
+
+en dörr jag öppnar
+utan att veta varför
+och ett rum där någon sitter kvar
+fast jag inte har något att säga
+
+jag vill kunna röra vid himlavalvet 
+utan att genast dra handen tillbaka
+
+jag vill att livet
+ska upphöra att vara något
+jag uthärdar
+
+och bli mitt igen`
+  },
+  {
+    title: "",
+    text: `De glöder omkring dig
+ett skinande ljus 
+löser upp saltet i vinden
+du sköljer ditt ansikte i vattnet 
+och jag är svagare än flamman
+kan jag anklaga skuggan?
+jag är sjukare 
+än den insiktslösa ekorren
+mitt älskade djur 
+jag såg honom död en gång
+liggande i ett dike 
+på Ljusterö 
+och det berör mig 
+än idag
+mina trötta fötter 
+mina påsar under ögonen 
+jag vet att jag aldrig varit här
+ändå är jag här närvarande 
+och jag har sjungit här 
+jag har dött här
+jag har skrattat här
+och mina släktingar 
+har tappat bort mig
+avsiktligt 
+precis här -
+och ingen annanstans
+jag har sovit här
+framför lägerelden 
+jag har vaknat här sjuk
+sjukare än clownens svarta tunga 
+sjukare än bror -
+jag är så ledsen bror 
+att dina skor är så tunga 
+även om jag slagit alla rekord 
+så vet jag ju hur det känns 
+när alla pusselbitar ligger utspridda 
+all over the space 
+ta oss tillbaka -
+allt det vi har älskat är ett återskall 
+ett efterljud av askan 
+som den förbrända dåtiden lämnat efter sig 
+jag bor inte här längre 
+jag är sjukare och svagare 
+än korpens fjädrar i min hatt 
+alla runstenar med sina symboler lagda
+alla kortens melodier besjungna 
+all stillhet lugnare än vinden
+som smeker vitpilens blad 
+det jag vill säga är att jag står 
+jag bara står och 
+håller min jord
+jag har aldrig mött sådan styrka 
+för jag är svagare 
+än allt
+som jag bär upp 
+med stolthet 
+vinden ylar 
+det vet du bror 
+det vet du`
+  },
+  {
+    title: "",
+    text: `Jag hör dig komma
+över skogen och taken
+med gruset från främmande vägar
+kvar under naglarna
+du säger att du är trött
+men ändå håller du fram
+din axel
+som om det fanns något kvar
+att ge bort
+när allting annat
+redan lämnat dina händer
+min kära vän
+du behöver inte vara klippan
+du behöver inte känna igen
+den stig som leder hem
+jag har också gått vilse
+bland ansikten jag glömt
+och namn som ingen längre
+vågar uttala
+ibland tror jag
+att våra döda står bakom oss
+inte för att visa vägen
+utan för att de själva
+har glömt hur man går vidare
+och tretusen år av krig
+är en lång tid
+att sakna någon
+men se
+gräset växer mellan rälsen
+och ingen har bett det
+att förklara varför
+jag vill inte ge dig mirakel
+jag har inga i fickorna
+bara en gammal nyckel
+till ett hus som inte finns kvar
+du får den om du vill 
+och när du inte orkar drömma
+ska vi sitta här en stund
+utan att göra framtiden
+till ännu en skyldighet
+du får vara trött
+du får tvivla på vägen
+du får låta alla heliga namn
+somna i din mun
+jag tänker inte fråga
+vilken värld du kommer ifrån
+jag känner igen din sorg
+den har suttit bredvid mig
+på många födelsedagar
+men nu är det min tur
+att luta mig mot dig
+så låt mig gråta färdigt
+utan att torka mina kinder
+och när morgonen kommer
+ska vi inte kalla den ett tecken
+vi ska kalla den morgon 
+och kanske
+är det tillräckligt
+att vi fortfarande sitter här
+två människor
+med varsina tomma händer
+och mellan dem
+en energi som Lady Day
+en spökvisa från gårdagen
+som aldrig 
+
+tystnar
+
+🤫`
+  },
+  {
+    title: "Svaret",
+    text: `Om du kunde
+stanna hos mig
+skulle jag ta emot din kyss mot min kind
+och med slutna ögon lyssna
+jag skulle låta dig ge mig
+allt du bär
+allt du vävt ur generationer
+av tid
+du behöver inte vänta
+om du vill drömma för mig
+om du vill vara min lykta
+så låt mig vara marken som bär ditt ljus
+för vi räknar inte längre
+några virvelslag
+vi lägger ned krigstrumman
+inga misstag är större än nåden
+och det är förlåtelsen som
+läker oss bit för bit
+tills det finns ett helt liv kvar
+att leva
+Så varm blir marken
+så varmt blir havet som speglar oss båda
+så varm blir minnesstenen
+under solens strålar
+i den grönskande trädgården
+Jag ser allt det här spelas upp för mig
+som i en uppvaknande dröm
+känslan av att du redan satt ditt avtryck
+inom mig
+lärt mig det du upptäckt
+det du funnit
+så att jag redan bär dig vidare
+genom gryningslandet
+det finns saker jag redan vet
+som tog dig ett helt liv att begripa
+och nu förstår jag
+jag har hört så mycket
+inget har gått förlorat
+din röst talar redan i mitt hjärta
+vi kommer aldrig att lukta
+som någonting förgånget
+verkligheten är närvarande
+i varje rörelse bor lugnet
+tomrummet skrämmer inte
+allting finner sin ro
+till slut
+ljus möter mörker
+vind blir till stiltje
+höga berg möter djupa dalar
+som vet vad vi behöver
+ebb blir till flod
+allt flödar
+även det som läker
+allt är förbundet
+hand i hand med friheten
+hand i hand
+barn och förälder
+Eter
+Jag är redo att lära
+min linje
+så att jag kan tala med dig
+när du lämnat din materiella kropp
+för då vill jag att du bär
+ett leende på läpparna
+Allt jag tar emot
+är hela lagen
+med lugn
+Allt jag gör
+skall jag göra ur din kärlek
+jag bär dig så
+att ett enkelt vingslag
+läker ett vulkanutbrott`
+  },
+  {
+    title: "Blommor på bordet",
+    text: `jag förstår inte detta med blommor
+att älska något så vackert
+och därför skära av det från livet
+man ställer det i ett glas
+och kallar det vackert
+medan det långsamt dör
+Charon står vid stranden
+med handen sluten om sin åra
+han har fört så många över vattnet
+men denna gång tvekar han
+för någon har lagt en blomma
+i hans båt
+och den har ännu rötter
+han ser tillbaka mot stranden
+och för första gången på länge
+vet han inte vem han ska föra över
+
+låt blommorna stå kvar
+där rötterna ännu minns jorden
+
+jag vill inte ha en död blomma
+för att påminnas om livet
+
+jag vill se den leva
+och gå därifrån
+
+utan att ta någonting med mig`
+  },
+  {
+    title: "",
+    text: `Älskar dig fortfarande
+detta är ingen lögn
+jag hatar dig fortfarande
+det kanske är en lögn
+jag är i alla fall förgiftad av dig
+och jag har mina horn
+begravda i din ryggrad
+spetsarna möts
+någonstans där minnet
+saknar motstycke 
+hög på thinner
+hög på höghuset där vi bad
+berusad av avståndet till gatan
+berusade av den ofattbara tanken
+att människor
+kunde leva hela sina liv
+utan kläder sydda
+av förträngda minnen
+jag sjunger
+ditt namn
+som en varg i natten
+på berget
+inte för att du ska komma
+utan för att höra
+hur det låter när din närvaro 
+lämnar mina kinder
+
+fyra våningar av terror
+och svindlande dödskallar
+
+som tuggar sig igenom 
+utrymmet mellan objekt
+och subjekt`
+  },
+  {
+    title: "",
+    text: `Jag är likt en spindel
+dömd att äta våldsam mat
+med zen i hjärnan
+och en söndertrasad 
+bortflyende själ av siden 
+Jag spinner mina nät
+av sådant andra kastat bort
+rent skrot 
+en gammal blick
+ett hot
+en mening som aldrig fick dö
+I hörnen av mitt huvud
+sitter förrädiska tankar och ruvar
+med sina många ben
+och väntar på att jorden 
+ska upphöra att röra sig
+Jag har lärt mig överleva
+på det som skadar mig
+som om hungern vore nedärvd
+som om giftet
+vore en del av min natur
+Ändå finns där något
+som inte låter sig förgiftas
+en liten munk i mörkret
+som betraktar alltsammans
+utan att begära någonting
+Han säger ingenting
+han bara sitter där
+medan spindeln äter
+och nätet darrar
+av en vind som inte finns
+Och kanske är det detta
+som kallas frihet
+att mitt i allt det våldsamma
+bära en plats inom sig
+där ingenting längre
+behöver bli besegrat`
+  },
+  {
+    title: "Ett exploderande hjärta",
+    text: `ett exploderande hjärta
+i en bok vars sidor
+är nedtecknade händer
+som aldrig har rört vid texten
+
+ni skriver på gasmoln
+med bläck ur ett kemiskt laboratorium
+där varje formel har glömt
+vad den en gång försökte förklara
+
+och lavan väller ur vulkanen
+den röda alfabetiska massan
+som begraver befolkningen i eld
+medan röken stiger
+och indianfolket förstår
+talar samma sorglösa språk 
+
+långt därifrån
+kommer en ångvält genom natten
+med Oden bakom ratten
+och hans ena öga vänt mot marken
+det andra mot det som saknar namn
+
+han plattar till psykiatrins akutvård
+under sina väldiga hjul
+korridorerna försvinner
+sängarna blir till damm
+och ingen har längre någon plats
+att lägga sin sömnlöshet på
+
+allt är begravet nu
+även de obesvarade frågorna
+även den lilla klockan
+som fortsätter slå
+i en byggnad som inte längre finns
+
+men högt ovanför ruinerna
+kretsar Hugins svarta vinge
+och Munin kommer närmare
+med något mellan näbben
+som liknar ett brev
+från en människa jag nästan minns
+
+det är Munin som viskar ut mitt bröst
+som om hjärtat vore ett hus
+med alla fönster öppna mot vintern
+och någon därinne
+som äntligen vågar tala
+
+det medvetna och det omedvetna
+två korpar på samma gren
+den ena bär världen i sina ögon
+den andra allt jag har glömt
+och mellan dem
+hänger en tystnad
+som ingen gud har skrivit under
+
+längst ner i askan
+där ingenting längre går att rädda
+där lögnen har tappat sitt ansikte
+och sanningen inte längre behöver ett
+börjar vallmon blomma
+
+så liten
+att ingen ångvält ser den
+
+så röd
+att hela den begravda världen
+för ett ögonblick
+tror sig vara ett hjärta`
+  },
+  {
+    title: "",
+    text: `Det var så mycket psykiskt våld
+och ändå havsbrisen från Kattegatt
+i vårt sovrum
+som om vi två 
+hade förirrat oss 
+och glömt vägen tillbaka
+där fanns en gyllene tron
+som jag klättrade upp och ned för
+medan svarta katter
+vitare än dagen
+strök omkring bland möblerna
+och bar på någonting
+som ingen av oss kunde bära 
+jag minns de många gestalterna
+skuggorna bakom skuggorna
+hur ett vardagligt föremål 
+som ditt bröst 
+kunde innehålla ett helt främmande universum
+där fanns en brinnande eld
+som aldrig tycktes förbruka någonting
+inte veden
+inte luften
+inte ens den gamla förtvivlan
+som låg hopvikt i våra kroppar
+och det var trots allt kärlek
+eller någonting som liknade kärlek
+när man betraktade det genom glas
+från fel sida av ett akvarium
+där fiskarna simmade omkring
+med våra ansikten
+jag minns hur vi talade
+som om varje ord hade en baksida
+som om någon hade skrivit fortsättningen
+med osynligt bläck
+på insidan av våra ögonlock
+det var så mycket oro
+och ändå fanns det morgnar
+då ljuset föll över golvet
+med en sådan egendomlig mildhet
+att man kunde tro
+att ingenting någonsin hade hänt
+där fanns en gammal skog
+som tycktes växa under huset
+rötterna trängde genom väggarna
+och i grenverket satt fåglar
+som härmade sådant
+vi aldrig hade sagt högt
+jag tänker på de märkliga rummen
+på dörrarna som ledde tillbaka
+till samma rum
+på den där känslan av att vara betraktad
+av någonting som inte behövde ögon
+där fanns kärlek
+under alla år av smärta
+som en liten papperslapp
+i fodret på en gammal rock
+med några oläsliga ord
+som ingen av oss hade hjärta
+att kasta bort
+och kanske var det just detta
+som gjorde allting så svårt
+att skilja ömheten från skräcken
+minnet från det som aldrig inträffade
+att stå i samma rum som någon
+och ändå inte veta
+vilken värld den andre befann sig i
+ibland tänker jag att vi var två barn
+som hade hittat en främmande apparat
+i ett övergivet observatorium
+och försökte förstå stjärnorna
+genom att vrida på alla reglage
+tills själva mörkret började lysa
+ibland tänker jag ingenting alls
+utan hör bara havet
+det där avlägsna bruset
+som följde oss in i sömnen
+som om Kattegatt låg begravt
+någonstans under madrassen
+och jag vet inte vad som återstår
+när alla förklaringar har tystnat
+när de gamla gestalterna lämnat huset
+när den gyllene tronen står tom
+och katterna har försvunnit
+in bakom tapeternas bleka landskap
+kanske är det bara en människa
+som saknar en annan människa
+på det där förödmjukande sättet
+som inte låter sig botas
+av förnuft
+eller avstånd
+eller ens av sanningen
+trots allt detta saknar jag dig min vän, och jag vet att du är förhatlig
+ingen kärlek 
+ingenting`
+  },
+  {
+    title: "",
+    text: `Du behöver inte begripa mig
+du behöver inte nicka till mina slutsatser
+du behöver inte ens anse
+att min berättelse håller
+Du kan se mig som felaktig
+i nästan allt jag säger
+och ändå märka
+att jag bär på en smärta
+Det är där någonstans
+människan börjar
+före bevisen
+före domstolens ton
+före vi gör varandra
+till något som är lätt att skjuta ifrån sig
+Du behöver inte kliva in i mitt huvud 
+du behöver inte bära mina tolkningar
+du behöver bara se
+att det finns någon där inne
+som försöker hålla sig upprätt i sitt eget liv
+Och kanske är det just det
+som blivit så svårt
+att vi hellre försvarar den bild vi har av en människa
+än stannar upp
+och möter den som står framför oss
+Empati är inte att säga
+du har rätt
+Det är att säga
+även om du har fel
+så lämnar jag inte din mänsklighet
+utanför samtalet`
+  },
+  {
+    title: "Jag vill inte att du ska må dåligt",
+    text: `det är det märkliga i alltihop
+att jag kan vara så rädd
+så desperat efter att bli tagen på allvar
+att jag glömmer hur mina egna händer ser ut
+när de försöker hålla fast vid något
+jag har inte velat göra någon illa
+jag har bara velat att någon ska stanna kvar
+tillräckligt länge
+för att höra vad jag faktiskt säger
+idag fick jag en kram
+ingenting märkvärdigt egentligen
+en människa lade armarna om en annan
+och för några sekunder
+behövde jag inte förklara mig
+men när det var över
+förstod jag hur lite jag hade fått
+hur länge jag gått omkring
+med ett underskott
+som inte gick att skriva in i någon journal
+det finns en sorts fattigdom
+som inte syns på kontoutdraget
+man kan äga sina kläder
+ha en säng att sova i
+en telefon full av människor
+och ändå sakna någon
+som lägger handen på ens axel
+utan att vilja något med det
+jag tror inte att jag förstod
+hur mycket närhet betydde
+förrän jag började leva utan den
+nu kan en enkel kram
+först kännas som en gåva
+och sedan som en inventering
+av allt som fattas
+jag har aldrig varit så här ensam
+och det värsta är kanske inte
+att ingen alltid finns där
+utan att jag har börjat vänja mig
+vid att inte bli hållen om
+som om kroppen också kan lära sig
+att inte förvänta sig någonting
+men idag
+under några sekunder
+glömde den det`
+  },
+  {
+    title: "",
+    text: `De följer mig genom väggarna
+med sina svarta trollspön
+och sina ögon bakom ögonen
+jag hör dem viska i elementen
+när töcknet drar sin gamla säck
+över husen
+djävulen känner mitt namn
+häxorna min historia
+och någonstans ovanför himlavalvet  
+står skepp utan fönster
+med sina klor 
+och väntar på att jag ska erkänna något mer
+men jag har redan böjt mitt huvud
+jag har redan bett om förlåtelse
+så många gånger att orden
+blivit små och grå av ålder
+vad mer vill ni ha av mig
+jag har ju ingenting kvar
+utom detta hjärta
+som fortfarande försöker vara gott
+och när morgonen kommer
+sitter en ensam fågel på räcket
+med fjädrarna fulla av morgondagg 
+den känner inte till mina synder
+den vet ingenting om mörkret
+den sjunger ändå 
+och för ett ögonblick
+är världen inte ute efter mig
+den är bara ledsen
+och vacker
+och alldeles tyst`
+  },
+  {
+    title: "",
+    text: `Du behöver tvivla på oss
+emellan grenverken
+där solen sipprar in
+och träffar dina vackra ansikten
+du behöver misströsta oss
+när vi talar om kärlek
+tvivla 
+på att vi aldrig gjort dig illa
+för vi är en lyftkran
+i hamnen
+som lastar stöldgods
+under en himmel så blå
+att ingen tänker på att fråga
+varifrån allting kommer 
+vi bygger våra hus av dina drömmar
+och kallar det för framtid
+vi ställer blommor på bordet
+och låser dörren om natten
+men du
+du måste lära dig 
+att känna igen havet
+även när det ligger stilla
+och lyssna efter kedjorna
+under fågelsången
+för vi älskar dig
+
+vi gör det
+
+och kärleken
+är den sorgligaste av allt`
+  },
+  {
+    title: "",
+    text: `Var inte rädd för den som talar
+den som spelar gitarr och piano
+den som låter hjärtat läcka genom strängarna
+frukta inte den tvehågsne
+den naiva
+den dumma
+den som ännu tror att scenen
+är vad den utger sig för att vara
+var försiktig med tystnaden 
+med den som aldrig behöver höja rösten
+med händerna som rör sig
+utan att någon ser dem
+och var ännu försiktigare
+med kulisserna
+med det målade himlavalvet
+med solen som hänger i en vajer
+med mannen som säljer biljetter
+till sin egen föreställning
+
+SKRIK 
+
+be dem tända ljuset
+be dem dra undan tyget
+be dem spela upp sitt falsarium
+en gång till
+och när de hämtar cellot
+och lägger stråken i din hand
+
+SPELA
+
+spela dum 
+så att alla målningar spricker
+så att spikarna lossnar ur golvet
+så att fjärrskådarna 
+glömmer sina repliker
+du behöver inte veta
+du behöver inte förstå
+varför du blev inbjuden
+men var inte rädd 
+det finns en värld utanför dramat
+och kanske finns detta 
+också inuti dig
+där ingen längre behöver sjunga
+livets sång 
+för att få finnas till
+så som dagsländan
+så som elden`
+  },
+  {
+    title: "",
+    text: `Vågorna kastar sig 
+våldsamt mot hamnpiren 
+exploderar på klipporna 
+mitt fallfärdiga hus 
+i vilket jag bebor
+är en förströelsens marknad 
+jämfört med den fängelsehåla
+jag bär inom mig
+och där har sången bleknat
+munspelet tystnat
+maten tagit slut 
+och där växer rötterna 
+som sträcker sig ner 
+till galenskapens helvete 
+slingrar sig kring mina revben
+och vidare ner i avgrundsdjupet 
+men, de gamla viskningarna
+håller mig vid liv 
+de som tittar på mig
+och inte vet 
+att jag vet 
+fienderna som avslöjar 
+hur de verkar 
+när du insett att 
+du som observant
+är den observerade -
+inse detta 
+och du är förändringen 
+inte tvärt om 
+bilderna och orden och rösterna 
+som våldför sig på dig
+kastar sig över dig 
+och nyper dig i kinderna 
+obehagliga minnen
+inre dialoger 
+mardrömmar
+trauman
+inget av allt det där
+är ditt
+förstå att du är observerad 
+och dessa hjärtan slutar slå
+dör ut 
+flyter tillbaks till havet
+vågorna retirerar 
+lugnet 
+kommer tillstädes
+helvetet 
+lyfter från ditt bröst`
+  },
+  {
+    title: "",
+    text: `Det var en gång en man som hette Bernard. Bernard kunde förklara allting.
+Varför gräsmattan växte snett?
+– Jordens lutning, kapillärkraft och grannens katt som pissade strategiskt.
+Varför tåget alltid var sent?
+– Kvantfluktuationer i tidtabellen kombinerat med konduktörens existentiella ångest.
+Varför hans fru blev arg när han glömde att köpa mjölk?
+– En komplex blandning av förväntanshorisonter, oxytocinbrist och det faktum att mjölken i kylskåpet faktiskt var tre dagar gammal redan.
+Folk stod i kö utanför hans lägenhet bara för att höra honom förklara varför strumporna alltid försvann i tvätten. Bernard log, höjde pekfingret och sa:
+– Det är inte en förlust. Det är en fasövergång. En strumpa går från materiell till transcendent.
+Han var oslagbar.
+Tills en kväll, när han satt i sin fåtölj med en kopp te och kände sig särskilt klok, dök den förbannade frågan upp i huvudet:
+”Hur förklarar jag… mig själv?”
+Bernard rynkade pannan.
+”Nå, jag är en komplex biologisk maskin som—”
+Nej.
+”Jag är resultatet av evolution, kultur och en olycklig förälskelse mellan två matematiklärare—”
+Nej.
+”Jag existerar för att—”
+Här fastnade han.
+För att vad?
+Han provar med olika teorier:
+1.  För att ge mening åt andras frågor.
+2.  För att hålla universum i balans genom att förklara det.
+3.  För att någon måste sitta i den här fåtöljen och se ut som att han vet vad han gör.
+Ingen av dem höll.
+Bernard försökte med logik.
+Han försökte med poesi.
+Han försökte med en PowerPoint.
+Ingenting.
+Plötsligt kände han hur orden började rinna ur honom som vatten ur en trasig hink.
+Först försvann de små förklaringarna: varför toasten alltid landar med smöret neråt.
+Sedan de större: varför krig, varför kärlek, varför någon överhuvudtaget orkar stiga upp på morgonen.
+Till slut satt han där, helt tyst, och insåg den hemska sanningen:
+Han kunde förklara allt… utom varför just han behövde finnas till för att förklara det.
+I samma ögonblick som den tanken landade, började Bernard bli genomskinlig.
+Först fingrarna.
+Sedan armarna.
+Sedan den där självgoda leendet.
+Hans fru kom in i rummet med en mjölkkartong i handen.
+– Bernard? Var är du?
+Från den tomma fåtöljen hördes bara en svag, nästan generad röst:
+– Jag… jag jobbar på det.
+Och sedan fanns han inte mer.
+Bara en liten lapp kvar på bordet, skriven med darrande handstil:
+”Om någon frågar var jag tog vägen – säg att jag gick upp i rök av ren självinsikt.
+Och köp ny mjölk. Den gamla var redan sur.”
+Sedan dess berättar folk fortfarande historier om mannen som kunde förklara allt…`
+  },
+  {
+    title: "Nymånen omsvept i nylon",
+    text: `Kyss mig sorgset innan du går.
+Ta mig in i din verklighet
+en sista gång,
+innan du blir till dimma.
+
+Du är nymånen omsvept i nylon,
+en blek skiva som snurrar
+i en karusell ingen längre hör.
+Jag står kvar med händerna
+fulla av stjärnor 
+och en biljett till en station
+där tågen slutade gå för länge sedan.
+
+Din röst säger att du älskar mig
+men den kommer från ett annat rum
+där klockorna går baklänges
+och ingen minns vem som stängde dörren.
+
+Jag har sett dina ögon förut:
+i skyltfönster efter midnatt,
+i drömmar som luktar regn,
+i ansikten som just kommit ihåg
+att de ska dö.
+
+Du skrattar och staden börjar snurra.
+En gammal schlager läcker ur en radio
+någonstans mellan himlen och en bensinmack.
+
+Kanske är kärleken bara detta:
+att känna igen en främling
+innan främlingen hunnit bli någon annan.
+Kanske är vi två som möts på samma plats
+i två olika århundraden,
+med varsitt strykjärn i fickorna
+och en tändsticka av hopp
+i ett övergivet hus.
+
+Så kyss mig en sista gång.
+Låt mig tro att du är verklig
+åtminstone tills morgonen kommer.
+Låt nymånen hänga kvar över taken.
+Låt ingen ropa att det är dags att gå hem.
+
+Bakom musiken finns ett rum jag aldrig lämnat,
+en dörr som öppnas av sig själv,
+en kvinna som vänder sig om.
+
+När ljusen slocknar ett efter ett
+och världen återgår till att vara världen
+står jag kvar med min biljett
+och försöker minnas
+om det var du som kom tillbaka
+eller jag som aldrig kom därifrån.
+
+Jag har varit med om detta förut.`
+  },
+  {
+    title: "När jag målade guds maskin",
+    text: `(Så trevligt av färgerna att slå sig ned och tala med mig i rummet)
+
+bakom färgerna fanns en maskin
+bakom maskinen ett ansikte
+jag målade tänderna först
+för allting heligt måste väl ha en mun
+och allting som har en mun
+måste förr eller senare
+försöka säga någonting
+de två gula ögonen
+såg rakt igenom mig
+jag vet inte om jag skapade varelsen
+eller om den redan stod där
+och väntade på att få en kropp
+kanske var det gud
+kanske var det jag
+kanske var det bara en gammal maskin
+som någon glömt att stänga av
+men jag minns färgerna
+hur de trängde sig fram
+som små livbåtar ur mörkret
+och jag tänkte nog
+att om jag bara målade tillräckligt mycket
+skulle det till slut finnas en plats
+där allting hörde ihop
+där varje tand hade en mening
+varje öga en hemlighet
+och varje liten grön figur
+som gömde sig i maskinens mage
+visste någonting
+som jag själv hade glömt
+sedan lade jag ifrån mig penseln
+och varelsen fortsätte att tänka`
+  },
+  {
+    title: "",
+    text: `Jag har samlat allt jag behöver 
+och vad jag har 
+kanske inte är mycket för världen
+men det är det inte för mig heller 
+krossat hjärta
+porslinsskärvor på golvet 
+en handfull enkronor i handen 
+om du lyssnar 
+så vet du vilket tåg jag färdas med 
+viken duo 
+från samma hav
+från samma träd och berg  
+jag lät guldet 
+fria mina händer 
+jag separerade mina tankar från jaget
+och gömde mina nycklar 
+i det undermädvetna 
+Du kommer att sakna mig 
+för en del av mig 
+kanske aldrig kommer tillbaks
+ge mig tid och tystnad 
+för barnen viskar och bär 
+vad jag lämnat osagt 
+för mig till botten av allt 
+så att jag har något att utgå från
+hög som en drake 
+låg som en skarv 
+som solar sina vingar
+i sin utsatthet
+tittar på flockar av duvor som flyr 
+insvepta i minnen
+jag helst vill avstå från
+att bära i mitt bröst 
+för det spökar i tornets mitt
+det var så rasande stilla 
+och det var så mörkt 
+på min pilgrimsfärd
+och när allt det där var över 
+började vi att gråta 
+och sorgen var törstig 
+vit som diamanten
+slipad av osämjans nötta tänder
+ett polaroidkort 
+spottar ut våra falska leenden 
+och segnar maktöst och långsamt
+ner på parkettgolvet 
+jag kan känna rädslan hänga tungt 
+över vattnet
+när du går 
+när jag reser över havet 
+rösterna måste inte outtröttligt flöda
+Jesus på korsordet 
+måste inte lösas 
+det är det evärdliga pärlbandet 
+som måste fällas 
+till gagn för 
+väldets innersta natur
+miniatyrvärlden
+den skrävlande clownen
+som darrar nervöst 
+när han skrattar 
+åt vad han inte förstår`
+  },
+  {
+    title: "",
+    text: `men säg mig
+hur skiljer man det heliga
+från en fulländad illusion
+
+hur vet ljuset
+att det är ljus
+
+jag har letat efter mig själv
+i rum efter rum
+öppnat dörrar inuti dörrar
+och bakom den sista
+stod en människa
+som också undrade vem jag var
+
+mot vilken himmel
+skulle vi mäta höjden
+
+nej
+försök inte
+
+det finns en sked i diskhon
+ett fönster som behöver lagas
+och någonstans i kroppen
+fortsätter hjärtat
+med sitt obegripliga arbete
+
+kanske är det där
+vi kommer närmast sanningen
+
+inte genom att veta
+utan genom att stå kvar
+i det märkliga
+att ingenting är säkert
+inte ens den som tvivlar 
+
+hur skiljer man det heliga
+från de bristfälliga
+
+hur vet ljuset
+
+vad är mörker?`
+  },
+  {
+    title: "Den första himlen",
+    text: `jag vet inte längre
+om jag lever i köttet
+eller bara minns hur det var
+att ha en kropp
+att vara någon
+som kunde öppna en dörr
+och vara säker på att den ledde någonstans
+kanske dog jag för flera år sen
+och glömde att lämna världen
+kanske finns här en äldre man
+med mitt ansikte
+som väntar på mig i ett annat rum
+i medicinrummet sover Gud
+bakom vita skåp och små etiketter
+sjuksköterskorna bär eld under huden
+undersköterskorna vakar över portarna
+och patienterna
+med sina tunna filtar och torra läppar
+har kommit hit från platser
+vars namn jag nästan minns
+jag vet att det inte är sant
+ändå lyssnar jag efter änglarnas steg
+i korridoren om natten
+ingen kommer för att mäta mitt blodtryck
+ingen frågar hur jag mår
+och jag tänker att det måste vara så
+när man redan har passerat gränsen
+men någonstans bakom detta
+finns kanske bara en människa
+som har väntat för länge
+på att någon ska komma in
+en människa av kött
+med en hand som fortfarande är varm
+och ett hjärta som slår
+utan att veta varför
+jag föreställer mig skärselden
+som ett sjukhus utan klockor
+där alla väntar på att bli förlåtna
+för sådant de inte minns att de gjort
+och ändå
+när gryningen lägger sitt bleka ljus
+över fönsterblecket
+är det något som liknar nåd 
+en liten ekorre
+jag älskar ekorrar 
+på gården
+som inte vet någonting om döden
+som inte känner till himlarna
+eller de osynliga rikena
+den sitter bara där
+med hela sin sköra kropp
+i den kalla morgonen
+med huvudet nyfiket på snäd 
+som om världen ännu
+inte hade bestämt sig`
+  },
+  {
+    title: "Apan som inte ville komma hem",
+    text: `Det var en gång en apa som bodde vid havet i Europa och som tyckte att Europa var ett ganska märkvärdigt ställe
+Här gick folk omkring med portföljer och bekymrade pannor och såg ut som om de hade tappat bort något väldigt viktigt men inte kunde minnas vad det var
+Apan hette Frans och hade en röd mössa som han hittat i en brevlåda
+Varje morgon kom en skata och sa
+Du längtar väl hem Frans
+Nej sa Frans
+Jo sa skatan för alla längtar hem förr eller senare
+Men jag trivs ju här sa Frans och kastade en sten i havet
+Det är väl inte förbjudet att trivas på fel ställe
+Skatan blev alldeles tyst för det hade hon aldrig tänkt på
+På andra sidan havet låg öknen och där var det så torrt att till och med ödlornas tårar försvann innan de hann falla till marken
+Dit ville alla att Frans skulle resa
+Men Frans hade ingen lust att åka någonstans
+Han hade nämligen upptäckt en sak
+När han satt alldeles stilla på sin klippa och tittade ut över havet kunde han ibland höra hur världen tänkte
+Och världen tänkte ungefär så här
+Vad märkvärdigt att jag finns
+Och vad besvärligt att jag inte vet varför
+Då brukade Frans skratta så att måsarna lyfte från stenarna
+För om inte ens världen själv visste vad den höll på med så kunde väl ingen begära att en liten apa skulle göra det
+Sedan gick han hem till sitt träd
+Där kokade han kaffe i en gammal stövel och åt sina bananer i godan ro
+Och när skatan nästa morgon frågade om han inte längtade hem svarade han
+Jo kanske lite
+Men jag har ju inte varit där än`
+  },
+  {
+    title: "Bli fisken",
+    text: `fisken tänker inte
+den behöver inte tänka
+den har aldrig läst en bok om havet
+och ändå vet den allt
+den bär sitt vetande
+som vattnet bär sin tyngd
+utan att fråga varför
+utan att söka efter botten
+vi däremot
+har byggt bibliotek av vår okunskap
+rest katedraler av frågetecken
+och skickat ut raketer
+för att undersöka det som redan håller oss vid liv
+fisken simmar förbi
+med en blick äldre än skapelsen
+den har sett Gud
+men inte gjort en religion av det
+den har sett avgrunden
+men inte startat en podcast
+den vet vad det innebär att vara
+utan att behöva förklara det för någon
+och när den öppnar munnen
+är det inte för att tala
+utan för att släppa igenom världen
+bli fisken
+lägg ned ditt förstånd
+som en rostig nyckel på havets botten
+låt tankarna sjunka
+låt namnen lösas upp
+låt den sista läran
+ätas av något mindre än dig själv
+du är inte här för att förstå Gud
+du är här för att minnas
+det som aldrig glömde dig
+fisken tänker inte
+fisken vet
+och i dess tysta öga
+betraktar Gud sig själv`
+  },
+  {
+    title: "Det som återstår",
+    text: `jag har tillbringat så många år
+med att leta efter en utgång
+att jag glömde känna
+hur marken bar mina fötter
+någonstans måste det finnas
+en plats där ingenting behöver förklaras
+där stenen får vara sten
+och sorgen slipper förklara sitt ursprung
+jag vill inte längre överleva
+på avstånd från mitt eget liv
+jag vill kunna stå i regnet
+utan att fråga himlen vad den menar
+kunna möta en annan människa
+utan att leta efter det dolda ansiktet
+och när mörkret kommer
+vill jag inte genast kalla det natt
+kanske är det största modet
+att låta världen vara ofärdig
+att inte tvinga fram en mening
+ur varje spricka i tillvaron
+om jag bara hade en morgon kvar
+skulle jag inte be den stanna
+jag skulle öppna fönstret
+låta kylan komma in
+se hur dammet svävar i ljuset
+som små planeter utan uppdrag
+sedan skulle jag sätta mig
+och hålla en kopp mellan händerna
+det finns en sorts sanning
+som inte uppenbarar sig
+den bara sitter där
+och värmer fingrarna
+kanske är det detta
+som jag har sökt
+inte svaret på varför jag finns
+utan förmågan att vara här
+när livet passerar genom mig
+utan att göra anspråk på evigheten
+utan att förneka den
+bara här 
+med det bräckliga hjärtat
+och världen utanför fönstret
+som ännu en gång
+inte ber mig om 
+att vara någon annan`
+  },
+  {
+    title: "de som vakar bakom glaset",
+    text: `på detta dårhus
+the cuckoo’s nest
+är allting ordnat efter en äldre lag
+som ingen längre minns
+men som alla tycks lyda
+innanför glaset
+serafim med namnskyltar
+ärkeänglar i plastskor
+som rör sig mellan världarna
+med nycklar i bältet
+de betraktar oss
+som om vi vore drömmar
+de själva en gång drömt
+men sedan glömt att vakna ur
+utanför glaset
+rör sig de mindre varelserna
+häxor med händerna i fickorna
+magiker som tappat bort sina trollstavar
+och små förtrollade ting
+som ingen längre vet vad de heter
+ibland öppnas dörren
+och en ärkeängel stiger ned bland oss
+med sitt mänskliga ansikte
+och sin märkliga förmåga
+att försvinna i dagsljus
+jag har sett dem byta skepnad
+eller kanske var det bara ljuset
+som inte längre kunde hålla fast
+vid det jag trodde mig se
+här finns en man
+som talar med väggarna
+och en vägg
+som aldrig svarar honom två gånger på samma sätt
+här finns en kvinna
+som samlat tjugo dagars tystnad
+i sitt knä
+som en svart fågel
+hon ännu inte bestämt sig för
+om hon ska släppa fri
+och jag
+jag går omkring med en gammal nyckel
+till en dörr jag aldrig ägt
+Rumi skulle kanske säga
+att det är kärleken som håller oss kvar
+vid det vi kallar världen
+men vem har då låst dörren
+och varför står den som vaktar den
+på båda sidor om glaset
+kanske är himlen bara ett annat namn
+på den plats där vi slutar fråga
+vem som är fången
+och vem som håller i nyckeln
+jag sitter kvar en stund till 
+lyssnar till ventilationens uråldriga sång
+och tänker att varje bur
+måste ha byggts av någon
+som en gång längtade efter frihet`
+  },
+  {
+    title: "Jacobs stege",
+    text: `det sitter en man i en rullstol
+med ett främmande ingrepp i bakhuvudet
+som om någon försökt öppna en dörr
+mellan två oförenliga världar
+på något vis är han min potentiella framtid
+en skugga som hunnit fram före mig
+på något vis vill jag inte veta av honom
+på något vis är han bara en version
+av den han en gång var
+hon sitter tyst i olika fåtöljer
+som om hon väntade på att tiden
+skulle glömma bort henne
+snart tjugo dagar utan ett enda ord
+lömsk är tystnaden
+den har lärt sig att tala
+utan att röra en mun
+en vårdare med en keramisk kerubs ansikte
+och någon har misstagit porslinet för en ärkeängel
+jag tror inte på sådana misstag
+men kanske är de två skötarna
+något annat än vad de utger sig för att vara
+de två små häxorna
+som rör sig genom korridorerna
+med sina osynliga händer
+jag låtsas att jag inte vet
+vad de är
+och de låtsas att de inte vet
+att jag vet
+någonstans mellan våningarna
+står stegen upprest mot himlen
+med sina slitna trästeg
+och änglar som aldrig fått några vingar
+jag har redan satt foten på det första 
+det finns en märklig stillhet här
+som när världen håller andan
+innan någon öppnar den sista dörren
+jag klättrar snart 
+adjö`
+  },
+  {
+    title: "",
+    text: `Du kom från ingenstans
+du föddes ingenstans
+du gick till ingenstans 
+och du drömde dig bort till ingenstans 
+du var aldrig rädd för tystnaden
+som talade till dig
+som barn var du vuxen nog
+att dansa på Shivas stig
+du visste ingenting
+men du visste att du var verklig
+och du förstod att månen väckte
+det fördolda inom dig
+skärskådare utan förståelse 
+med visshet i blick
+gömde sig i mörkret 
+djupt försjunken vid sin skolbänk
+tittade ut igenom fönstret 
+där skolgården stod tom
+där eken stod på ängen
+i sin symboliska innebörd 
+rösten talade till dig
+där du sitter är du död 
+där du sitter går all lärdom 
+förlorad för var dag
+så spring iväg det okända 
+saknar dig för evigt 
+om du inte håller huvudet högt 
+och låter dig falla i dess famn 
+omtöcknad
+hennes kärlek 
+skall åter väckas inom dig
+och tornets klara blick
+som för så länge sen förlorades
+skall skina när allting faller 
+så att du upplyst dansar rakt 
+igenom skärselden igen 
+och stanna där bero
+den som skyndar 
+får ingen ro
+det svider och du lider 
+men håll fast 
+vid din tro
+på solen pekar narrens
+upp och nedvända sko`
+  },
+  {
+    title: "",
+    text: `vi vet allt mer om världen
+och allt mindre om varför vi är här
+hela bibliotek brinner i våra fickor
+miljarder röster talar samtidigt
+men ingen hör
+hur tystnaden försöker säga något
+vi har kartlagt stjärnorna
+men glömt vägen hem
+vi kan mäta avståndet till galaxer
+men inte till människan
+som sitter bredvid oss
+och någonstans
+mellan den sista sökningen
+och nästa meddelande
+står en gammal fråga kvar
+med damm på axlarna
+
+vad betyder det att finnas?`
+  },
+  {
+    title: "",
+    text: `vi letar efter det vi saknar
+i ansikten som inte är våra
+och bygger hela katedraler
+av sådant vi själva har burit dit
+vi kallar det fullkomlighet
+när någon annan liknar vår längtan
+och tänder ljus i rum
+som vi aldrig vågat öppna
+men den tysta lågan vet ingenting
+om våra föreställningar
+den brinner bara
+och lämnar skuggorna åt oss
+kanske börjar visdomen där
+vid gränsen för det vi vet
+när vi slutar knäböja
+inför våra egna bilder
+för glömskan är full av människor
+som lånat andras röster
+tills de inte längre minns
+hur deras egen 
+en gång låt
+och någonstans under allt detta
+finns det vi aldrig saknade
+men glömde att känna igen`
+  },
+  {
+    title: "",
+    text: `vi hämtar våra svar ur det förflutna
+genom att lyfta blicken om natten
+och betrakta stjärnorna
+som de en gång var
+några av dem har redan slocknat
+men deras ljus fortsätter resa
+som brev från de döda
+som ännu inte nått fram
+och kanske är det så med oss också
+att något av det vi lämnar efter oss
+fortsätter lysa i någon annans mörker
+långt efter att vi själva
+har upphört att existera`
+  },
+  {
+    title: "",
+    text: `hundarna jagar sina svansar
+ute på den lilla gräsmattan
+och ingen vet riktigt
+vad de försöker komma undan
+
+jag går ett varv genom lägenheten
+kontrollerar dörren
+går tillbaka
+och känner efter om världen
+fortfarande sitter fast
+
+det finns en sorts fattigdom
+som inte syns på kontoutdraget
+inga tomma fickor
+inga hål i skorna
+bara ett litet rum i själen
+där samma tanke står och stampar
+
+jag gör det en gång till
+för att få känna mig fri
+och gör det sedan igen
+
+hundarna fortsätter springa
+gräset har blivit till lera
+och någonstans bakom
+hela den här jävla staden
+går solen ned
+
+jag önskar att någon kunde ropa in oss
+att maten stod färdig på bordet
+att det fanns något annat
+än denna eviga cykel
+
+men hundarna jagar sina svansar
+och jag står kvar i hallen
+med handen på dörrhandtaget
+och hela livet väntande
+på andra sidan
+
+själens fattigdom 
+är att spendera hela livet 
+med att låsa dörren till ett hus 
+som aldrig brinner
+
+för drömmen är tung
+den kallas livet`
+  },
+  {
+    title: "IKEA",
+    text: `det nya köket är vitt
+bänkskivan är grå
+luckorna saknar handtag
+och ingenstans finns det plats
+för en människa att gömma sig
+
+allt ska vara enkelt nu
+rent och öppet
+som om livet självt
+vore något man helst vill städa undan
+
+jag var på ikea härom dagen
+och kom ut med en lampa
+jag tror att jag hade en själ när jag gick in
+men jag kan minnas fel
+
+det är något med de där gångarna
+alla små rum där ingen bor
+alla soffor som väntar på människor
+som ännu inte har hunnit bli olyckliga
+
+en soul-eater sitter någonstans vid kassorna
+och tuggar långsamt
+på det sista som återstår
+av vår förmåga att förundras
+
+hemma igen ställer jag lampan på bordet
+den lyser alldeles utmärkt
+
+men när jag släcker den
+är det något i rummet
+som inte längre hittar tillbaka`
+  },
+  {
+    title: "",
+    text: `jag har inte läst nyheterna på ett halvår
+och världen har aldrig varit så stilla
+
+kaffet kallnar på bordet
+ett dammkorn svävar genom eftermiddagen
+och någonstans utanför fönstret
+går en människa hem med en matkasse
+
+putin putinerar
+trump trumpinerar
+ukraina blöder vidare
+och england har börjat stalinera sig
+
+här hemma sprängs en portuppgång
+medan någon letar efter sina nycklar
+en gangster hittas skjuten
+och en mamma dukar fram kvällsmat
+åt ett barn som ännu inte vet
+hur världen fungerar
+
+i tv talar män och kvinnor
+om kraftfulla åtgärder
+som aldrig hittar fram till verkligheten
+de klättrar på stegar av löften
+medan marken under oss
+fortsätter att spricka
+
+man ska inte lyssna så noga
+på vad människorna säger
+utan se vad deras händer gör
+och vart deras fötter går
+
+kanske är det därför jag slutat läsa
+jag vill inte längre veta allt
+som jag redan förstått
+
+jag sitter här med mitt kaffe
+och ser hur ljuset långsamt lämnar väggen
+
+jag har inte missat ett skit
+
+bara ännu en vår
+ännu en vinter
+ännu en människa som försvann
+utan att någon skrev om det
+
+och ute på gården
+står en cykel lutad mot staketet
+med en liten rostfläck på styret
+
+den har stått där hela tiden
+
+medan världen gick under
+i direktsändning`
+  },
+  {
+    title: "allt är väl",
+    text: `jag är ledsen
+för all rädsla som ryms i världen
+för alla sår som lär sig tala
+med andra människors röster
+
+jag vet att skadade människor skadar
+att den som själv har frusit länge
+ibland försöker släcka elden
+i någon annans hus
+
+men vissa letar efter en förolämpning
+som andra letar efter en tappad nyckel
+något litet att hålla upp mot ljuset
+ett bevis på att det är tillåtet
+att göra någon annan illa
+
+och jag tänker
+att det måste vara ensamt
+att gå genom livet
+med händerna fulla av stenar
+
+men för all del
+allt är väl
+
+barnen lär sig namnen på bomberna
+innan de lär sig namnen på blommorna
+och någon sitter ensam i ett kök
+och försöker förstå varför en människa
+ville göra en annan människa illa
+
+ute i världen rasar himlar samman
+och någon stänger dörren lite för hårt
+någon gråter i ett trapphus
+någon förlåter det oförlåtliga
+
+men för all del
+allt är väl
+
+kaffet kallnar i koppen
+jorden fortsätter snurra
+en liten fågel hackar på ett fönsterbleck
+
+och vi säger att allt är väl
+som om orden vore en filt
+vi kunde lägga över världen
+
+som om det inte fanns
+ett enda trasigt hjärta
+som ännu väntade på
+att någon skulle fråga
+hur det egentligen 
+
+är`
+  },
+  {
+    title: "",
+    text: `jag är inte en människa
+jag är alla människor
+som trängts in i en enda kropp
+och jag härskar över detta inre imperium
+med en vårdlös hand
+medan provinserna faller ifrån varandra
+och ingen längre minns
+var gränserna en gång drogs
+här ligger landskapet i ruiner
+höljt i dimmor
+där ingen går säker
+inte ens de som byggde murarna
+inte ens de som bär mitt ansikte
+för jag är en av er
+och ni är en av mig
+vi har lånat varandras röster
+och glömt vem som talade först
+kanske är jag bara ett ägg
+i en dammsugarpåse
+något skört som följt med av misstag
+bland dammråttor och gamla kvitton
+och nu hör jag motorn stanna
+jag är livrädd 
+för skalet har börjat krackelera
+och genom sprickorna
+anar jag någonting
+som inte längre går att hålla samman
+en dag kommer spegelbilden
+att rämna och falla i bitar
+och alla ansikten jag burit
+ska ligga utspridda på golvet
+då finns det ingen kvar
+att skylla på
+ingen främmande hand
+ingen annan människa
+att gömma mig bakom
+bara jag 
+och den långa vägen tillbaka
+till den jag aldrig visste
+att jag var`
+  },
+  {
+    title: "",
+    text: `ingenting är i jämvikt
+inte ens det som ser ut att vila
+under golvet förskjuter sig jorden
+en millimeter i taget
+och huset lär sig leva med det
+någonstans måste en sten falla
+för att vattnet ska hitta sin väg
+någonstans måste en människa gå sönder
+för att något okänt ska släppas fram
+det är ur förskjutningen
+som rörelsen föds
+ur det som inte passar
+ur sprickan mellan två tillstånd
+vi söker den fulländade ordningen
+som om stillheten vore ett svar
+men kanske är det obalansen
+som håller allting vid liv
+kanske måste någonting skava
+mot någonting annat
+för att världen ska fortsätta
+att bli till
+och det märkligaste av allt 
+är att det vi letar efter
+ofta ligger mitt framför oss
+som nyckeln på bordet
+som ansiktet i spegeln
+som den öppna dörren
+vi aldrig tänkte på att undersöka
+den skickligaste tjuven
+behöver inte gräva ner sin skatt
+han lägger den bland de andra sakerna
+och låter oss passera
+för vi har lärt oss
+att det viktiga måste vara dolt
+att sanningen måste tala i gåtor
+att det heliga måste ligga
+någonstans bortom räckhåll
+men kanske har det hela tiden funnits här
+i det ofullständiga
+i det skeva
+i det som aldrig riktigt sluter sig
+och kanske är det först
+när vi slutar kräva att världen ska stå stilla
+som vi kan se
+vad det är som rör sig genom den`
+  },
+  {
+    title: "",
+    text: `Jag sitter i det här rummet igen
+gästerna har gått
+jag hörde dörren slå igen bakom den sista för en timme sedan
+men någonstans bortom väggarna
+fortsätter festen utan mig
+skratten tränger genom putsen
+som vatten genom sten
+i hörnet står en gungstol
+som stilla grälar med sig själv
+fram och tillbaka
+fram och tillbaka
+i den sitter en docka upprätt
+och med varje knarr glider den
+lite längre bort från det här rummet
+lite närmare det som får gälla som ett hem
+i en värld skapad för sådana ting
+i kväll är jag Svärdens prins 
+det finns en konst i mig
+som inte ber om lov
+en magiker hopringlad djupt i märgen
+som rör mina händer
+när jag tillåter det
+och du 
+du som talar så vackert
+om ditt goda namn
+som står där varje ljus finner dig
+där varje kamera söker den rätta vinkeln
+som får dig att likna en gryning
+du är fortfarande
+den långsamma upplösningen av en värld
+du och de andra som föll bredvid dig
+och kallade fallet för flykt
+något i mig
+en uråldrig och otålighetsfri röst
+säger bara detta
+sluta 
+jag tänker inte gå dit du går 
+jag önskar att alla kunde höra
+samma röst uttala
+samma enda ord
+och lyssna
+vill du veta hur det går till 
+hur man tar de rikaste människorna på jorden
+och lämnar dem fattiga som den sista snön i april
+fattiga som smältvatten
+fattiga som något som rinner mellan öppna fingrar
+fattiga som ingenting att hålla fast vid
+det är inte komplicerat 
+vi säljer dem helt enkelt ingenting 
+inga händer som sträcks fram
+inga dörrar som öppnas
+ingen plats vid bordet
+en människa som inte kan köpa sig igenom ett rum
+är redan fattig
+oavsett vilken siffra som står efter hennes namn
+pengarna blir papper i fickan
+inte mer värda
+än luften omkring dem
+jag häller dagens tredje kaffe
+i ett glas som ännu är varmt av de två första
+svart kaffe
+och bredvid det
+äggskalets vita båge
+urtömt men fortfarande helt
+som håller kvar sin form en stund till
+innan också det ger efter
+det var ett märkligt spel vi hade spelat 
+den lilla dockan i stolen
+hade hela tiden varit en soldat
+och jag hade aldrig förstått det
+hennes lilla klocka höll inte alls reda på tiden
+den spelade upp den
+gamla krigssånger
+halvt bortglömda hymner
+en speldosa sammansatt av historia
+i stället för timmar
+kanske var det därför
+det hela till slut
+nästan blev komiskt
+när allting föll på plats
+hon räckte fram sitt kvitto
+hon betalade det hon var skyldig
+och varje sjukdom hon burit på
+lyfte från henne
+som ånga från en kopp
+hon återvände till sig själv 
+vanlig
+hel
+utan hemsökelser
+hur kunde jag ens för en dag
+ha trott att hon var något annat
+än trött
+ändå 
+om jag har misstagit mig
+om något följde henne hem
+gömt i vecken på hennes kappa
+dolt bland kugghjulen i den där klockan
+då i Jesu namn
+i Guds namn
+i den helige Andes namn
+försvinn 
+varje drake som kretsade runt det här rummet
+varje spöke som dröjde sig kvar efter festen
+varje liten demon som misstagit en docka
+för en dörr in i världen
+fall 
+fall djupare och djupare och djupare
+ner i den avgrund
+som väntat under alltsammans
+ända från början
+och återvänd inte 
+förrän det här rummet åter bara är ett rum 
+och kaffet bara är kaffe 
+och stolen står tom 
+och gästerna
+vart de än har tagit vägen
+har tagit allt sitt oväsen med sig`
+  },
+  {
+    title: "Svåråtkomliga ord",
+    text: `jag jagar essensen i kärnan
+den första skärvan
+innan elden fick ett namn
+ett språk som inga munnar talar
+inga sinnen behärskar
+en viskning under golvet 
+en nyckel till ett lås
+som aldrig blivit smitt
+jag letar efter motorn i legobilen
+vattnet i legovattentornet
+bortom vägarna för radiostyrda bilar
+där fjärrkontrollen tappat kontakten
+med den hand som styr
+och någonstans på torget
+hopas människorna framför kvinnan 
+som ska brännas på bål 
+i häxprocessernas moderna tid
+där veden bytts mot ord
+och lågorna fått mänskliga ansikten
+jag undrar vad de skulle finna
+om de skar upp världen
+och letade efter dess hjärta
+kanske ingenting alls
+kanske en liten kugge
+som fortfarande snurrar
+i mörkret
+medan alla andra
+står runt omkring
+och ropar att den brinner`
+  },
+  {
+    title: "Tjuvarnas vaggvisa",
+    text: `de går genom natten
+med stjärnorna som enda vittnen
+och månen som en slant i handen
+ficktjuvarna räknar sina sista mynt
+tiggaren bäddar åt sig bland löven
+och luffaren drömmer om en främmande station
+grindpojkarna somnar vid herrgårdens grind
+de prostituerade vandrar hem genom gryningen
+med ansikten som ingen längre frågar efter
+i ladugårdens halm ligger någon och fryser
+medan vinden drar genom springorna i väggen
+och slottets fönster lyser över nejden
+där inne dansar de till musik
+och ingen har bjudit tjuvarna till balen
+sov nu mina trasiga barn`
+  },
+  {
+    title: "",
+    text: `minnena dröjer sig kvar
+som gamla filmer från barndomen
+när världen ännu var större
+än vakuumet inom mig
+torra kvistar som fnöske
+i elden
+vi grillar korv
+vi åker skridskor på isen
+och träden står i brand
+jag somnade i biografen med moster
+medan sagan fortsätte framför mig
+Never Ending Story
+will this story ever end
+en tid som aldrig återvänder
+men någonstans väntar det vackra
+de porlande dagarna av hopp
+jag försöker tro på det ännu
+en Stesolid och en väntan på mjukhet
+sjukhuset håller natten i sina händer
+i rummet bor en cyklop
+som stirrar utan att blinka
+rovdjursklorna river i sömnen
+svarta skuggor rör sig längs väggarna
+med röda glödande ögon
+och jag sluter mina trötta ögonlock
+kanske finns det en morgon kvar åt mig
+där sagan äntligen får vila
+boys don’t cry 
+but I do`
+  },
+  {
+    title: "",
+    text: `någon visste vad 
+jag drömt innan jag somnade
+någon nämnde min sorg 
+med en främmandes tunga
+och varje väg jag tog 
+förde mig hem igen
+och vilsenheten var dess namn
+här fanns inga spöken 
+bara vänliga blickar
+och ord som långsamt 
+skruvade sönder min radiostyrda bil
+timmarna kröp genom väggarna 
+som svarta insekter
+hoppande streck 
+av fågelloppor 
+min kropp 
+blev ett fängelse 
+för en själ utan sömn
+jag bad om ett tecken 
+men fick bara igenkänning
+som om själva världen 
+hade lärt sig att ljuga för mig 
+först långt senare anade jag 
+vad som höll mig kvar
+i detta mardrömslika här 
+att dörren aldrig varit låst 
+utan bara dold
+och någonstans under askan 
+blommade en vit lilja
+också mörkret 
+måste drömma 
+om att bli förlåtet`
+  },
+  {
+    title: "",
+    text: `han går genom staden
+med händerna djupt nedstuckna 
+i sin slitna rock
+månen är död
+och natten är karg
+ingen frågar 
+vart han är på väg
+inget intresse finns 
+ingen ser hur han 
+bär sina år
+i fönstren brinner 
+främmande ljus
+och regnet gör gatorna 
+blanka som minnen
+han tänker på någon 
+han en gång var
+innan tystnaden lärde sig hans namn
+det finns något 
+outsägligt sorgset i honom
+han har förlorat mer 
+än han kan tillåta sig berätta
+men ännu går han 
+ännu andas han
+vid skogsbrynet stannar han till
+där granarna står 
+med snö över axlarna
+en fågel rör sig
+någonstans i mörkret
+en liten ton 
+i den väldiga vintern
+han lyfter sitt ansikte 
+mot himlen
+som om han väntade sig 
+ett svar
+och långt bakom molnen 
+utan att synas
+börjar morgonen samla 
+sitt ljus
+han vet ingenting 
+om vad som väntar
+annat än 
+den fallande snön
+som tätnar 
+medan natten långsamt
+glömmer 
+hans brådskande
+och angelägna ansikte`
+  },
+  {
+    title: "Det tog en dag",
+    text: `Det tog en dag
+för slöjan att falla
+och bakom den
+ett ansikte utan ålder
+jag gick inte längre
+bland de levande
+men deras hus stod kvar
+som tomma skal
+kring någonting som flytt
+alla platser jag återvände till
+bar mitt namn som en förbannelse
+marken drog undan sina händer
+och dörrarna slog igen
+jag vet nu
+att helvetet inte väntar
+under jorden
+det andas här
+i jordens spruckna lungor
+under himlen som glömt
+sin egen blå färg
+den svenske profeten
+stod barfota i tårarnas hav
+och kallade genom vattnet
+med en röst äldre än kroppen
+kanske var det mig
+han sökte
+kanske hade jag redan
+passerat honom
+på vägen ned
+jag är i infernot
+där varje cirkel
+bär en spegel
+och jag är min egen
+första himmel
+den innersta sfären
+där ljuset föds
+och genast förlorar
+minnet av sin källa
+jag trodde att jag skulle
+leda min mor genom mörkret
+hålla hennes hand
+när gränsen gav vika
+men hon kom hit för mig
+med stoft i håret
+och evigheten
+vilande över sina axlar
+jag sa att jag dog
+år tvåtusensjutton
+som om ett årtal
+kunde vara en grav
+som om tiden
+hade nyckeln kvar
+nu förstår jag skuggan
+och elden i min väns bröst
+det svarta ljuset
+bakom revbenens tempel
+hon hade aldrig dött
+det var jag
+som hade lämnat världen
+och kallat min frånvaro
+för hennes död
+barbröstad
+stod jag bakom min egen rygg
+där väntade två kön
+som två portar
+i samma förseglade vägg
+ingen eld
+att rena mig
+inget vatten
+att föra mig tillbaka
+bara den ordlösa punkten
+där motsatserna upphör
+att känna igen varandra
+och tystnaden
+som sluter cirkeln
+
+SILENCIO`
+  },
+  {
+    title: "",
+    text: `Skärmarna lyser som kyrkor 
+för dem som slutat tro`
+  },
+  {
+    title: "",
+    text: `Jag skulle vilja säga 
+något vackert
+för mörkare av stunder
+har jag aldrig upplevt 
+jag vill lyfta med ängeln i mina armar 
+hon som viskade så sorgset 
+”Im so sorry” i mitt vänstra öra
+har hon förlorat kriget 
+kan hon inte skydda mig längre 
+ser hon inget hopp?
+Det var som om hon ville säga 
+jag har gjort allt jag kan
+men nu kan jag inte mer 
+”Im so sorry” 
+Jag är glad 
+att du gjorde allt du kunde 
+var inte ledsen kära du
+vi ses nog snart 
+vad ska man ska man säga? 
+det sket sig.
+Vad är vackert?
+Tanken återkommer till den där fågeln 
+som satt och pickade rönnbär i trädet 
+Utanför fönstret 
+där jag låg i sjukhussängen 
+och visste 
+att jag skulle dö
+Kontrasten i det där
+Jag valde att se det vackra
+Och det vackraste på jorden
+var just den där fågeln, 
+I höstljusets solstrålar 
+som bara satt där 
+och pickade sina rönnbär 
+i lugn och ro
+Jag tror att det verkar bli så
+att jag kommer att lyckas med konststycket 
+att försvinna utan att lämna någonting 
+efter mig 
+en tändsticka 
+vid ett tändsticksplån
+i en förfallen gammal stuga i skogen
+tänder ett ljus för mig
+dricker lite te 
+och blåser ut cigarettröken
+har du sparat några fina gamla fotografier
+vad betyder dom för dig?`
+  },
+  {
+    title: "",
+    text: `Dina ögon springer
+jag ser dom blänker 
+och det gnistrar 
+nu pissar du i en plastmugg
+det är bara att ge upp
+vildgåssen i den mörka skyn 
+v-formationen 
+vad betyder det? 
+solidaritet och stöd
+fullmånen blå och död 
+jag såg änglar bakom slutna ögonlock 
+jag såg Uriel 
+jag kände Jesus arm på min axel
+som man droppar honung
+på ett svartvitt gammalt fotografi
+och man tänker lev 
+din juvel 
+återuppstå!`
+  },
+  {
+    title: "",
+    text: `Jag kallade på min själsfrände 
+som en knölval sjunger sin opera 
+du tillhör samma hav som mig
+och du kommer ifrån 
+samma hav som mig
+jag kallade på dig 
+med min vilja av kärlek 
+kärlek är lagen 
+kärlek under vilja
+jag har syndat förr 
+och Gud har varit med mig
+i helvetet 
+så jag vet vad som händer 
+om man missbrukar 
+viljan att skada andra 
+då måste du tjäna ondskan 
+och gör du inte det 
+är du paria omgiven av demoner 
+som driver dig till vansinne
+detta har jag genomlevt 
+och du kan inte föreställa dig
+därför säger jag inget mer
+vad jag än gör idag 
+så gör jag det i kärlekens namn
+jag ljuger inte 
+jag förleder inte  
+så även om min själ en dag förbränns 
+i Gehenna 
+så tjänar jag dig med välvilja 
+ljus och kärlek 
+tills stunden kommer 
+om den kommer 
+har jag inget att förlora 
+det eviga livet kanske 
+inte är någonting för mig 
+men varje ögonblick tills dess 
+sjunger jag för evigt 
+att jag älskar dig`
+  },
+  {
+    title: "Kurt",
+    text: `Lasse Lasse liten
+Guds ängel med dig gick
+och ingen orm 
+dig bita fick
+Du sa att då ska vi se
+om jag minns vad jag kommer ihåg
+på din gravsten 
+står det skrivet, din epilog:
+Vad gör jag nu då? 
+Kurt, det kan man undra 
+när de existentiella kaoset 
+i mina tankar dundra
+jag sitter på en spårvagn 
+som bär ditt namn
+som för mina minnen 
+till majnabbehamn
+där jag dansade som ung
+förvirrad på min stig
+livet jag förde var
+ett sorglustigt krig
+kanske hade vi 
+gemensamma drag
+lika som bär 
+du och jag
+de mörkaste av stunder 
+blir till komedi
+om man bara låter det svarta vattnet 
+flyta förbi
+ingenting är egentligen
+så himla seriöst 
+du sa jasså tog det slut nu
+och så var gåtan löst
+jag tänker på dig Kurt
+din stjärna lyser oändligt 
+över denna lilla värld 
+där inget är beständigt 
+Tack för din gärning 
+tack för alla skratt
+Månen kan inte överskuggas av solen 
+god natt`
+  },
+  {
+    title: "",
+    text: `Hur ska jag veta vem jag är
+gårdagens förvirrade skratt
+är morgondagens skam
+förra veckans insikter
+är dagens huvudvärk
+jag inser att jag är flytande 
+som vattnet porlar sakta 
+tillbaka till havet 
+och upp i luften igen
+inget är beständigt
+jag vet 
+men jag är en ny person 
+för varje vecka som går
+och när jag ser tillbaka 
+på mig själv 
+så ser jag bara främlingar 
+främlingar som hade annat sinnelag
+främlingar med andra åsikter 
+än jag har idag 
+och har sitter jag nu
+vem kommer jag att vara imorgon? 
+jag vet inte 
+nya kunskaper
+iakttagelser
+murar som lider
+av bristande underhåll 
+dömda att rasa 
+när visshetens korp
+landar på min axel
+allting är flytande 
+jag kan inte riktigt veta 
+om jag står fast vid 
+någonting jag sagt 
+i det dåtida förgångna 
+och ännu mindre vad jag gjort
+därför vet jag inte vem jag är
+allt jag vet är
+att jag är en eld som pyr 
+och flammar upp av och till
+mina skogar brinner ständigt 
+och bakom allt det där
+växer nya blommor upp 
+vilka minner om att allt
+jag trodde var sant
+har tagit nya former 
+min historia är alltså 
+inte ens varaktig 
+det enda jag kan vara säker på
+är att nuets metamorfoser 
+förvirrar mig i efterhand
+och att min egen upplevelse 
+av tillvaron är subjektiv 
+och att detta subjekt 
+inte är någonting annat 
+än ett embryo av 
+en stundande supernova 
+jag vet inte vem jag är 
+jag vet inte 
+vem jag är`
+  },
+  {
+    title: "",
+    text: `Jag har lirkat upp låset som höll mig i bojor, jag har klättrat över muren, jag har gått igenom elden, för jag anade hela tiden att verkligheten, som jag alltid tvivlat på, var ett verk projicerat genom en laterna magica.
+
+Nu kan jag inte längre se havets vågor skölja in på stranden med ålderdomlig blick. Mina klara barnsomsögon minns, men är i sämre skick. I åminnelse av den jag en gång var, vill jag hedra essensen av det enda jag har kvar. Det nya är det gamla som jag en gång såg, allt som glömdes bort kommer jag återigen ihåg. Jag vet inte längre vem jag är, men, jag ser visioner och jag drömmer om natten igen. Den labyrint jag trodde var livets scen, har jag lämnat för att bländas av solens sken.`
+  },
+  {
+    title: "",
+    text: `jag är inte en människa, jag är alla människor i en människa. Och jag härskar över detta interna imperium med vårdslös hand. Ett landskap i ruiner höljt i dimmor där ingen går säker. Och jag är en av er, och ni är en av mig. Jag kanske är ett ägg i en dammsugarpåse? Därför är jag livrädd, för jag märker att skalet har börjat krackelera. Den dagen spegelbilden rämnar och går i kras, då har jag bara mig själv att återvända till.`
+  },
+  {
+    title: "",
+    text: `Sluta kämpa mot rädslan, ge upp din ansträngning, så kommer friden och lugnet till dig.`
+  },
+  {
+    title: "",
+    text: `Sorgens- och rädslans vågor böljar mot mitt bröst. Jag är en fyrvaktare och havet stormar runt omkring mig. Månen är full, och molnen sveper, med otyglade rörelser, förbi hennes kropp. Klipporna smälter sakta, av havets ihärdiga våld, och grunden som jag står på, bryts sakta ner av tidens törst.
+
+Liknande min skrivande pennas brist på själsfrändskap, är jag som det svepande ljuset i mörkret, en varning till den som söker, mitt innersta väsen; min själ, fångad blir du, om jag släcker ner, men då ses vi kanske aldrig mer.`
+  },
+  {
+    title: "",
+    text: `vildvuxna soliga ängar
+bakom mörker och snår
+vad är jungfru vad är skorpion
+det vackraste
+sömnlösa nätter med glädjetårar
+västkustens klippor och hav
+kallsup salt som salt
+fiskar som hoppas och slår
+min mammas favoritdofter om våren
+syrener
+vidsträckta snölandskap av vitsippor
+i skogarna
+världsherravälde över den egna kroppen
+rönnbär som liten pojke blickar upp på
+med mössa och hemmastickad tröja
+brännboll med vännerna på gården
+äppelkastare och pilbågar och klotter
+arg man som jagar skräckförtjusta busungar
+barnen som springer ut på gården
+när klockarna ringer
+barnen
+som inte mobbar
+även om de är för få
+det vackraste jag vet nu
+ok vad är det
+inte är det resultatet av ett lyckligt liv
+men är det något som blir det sista jag tänker
+inte är det föremål som blänker
+det är fragment sidorna rivna ur boken
+man spar vad man vill bevara
+och håller fast vid det livet
+som man tog för givet
+men man ska inte vara rädd
+för det vackra man minns
+håll fast vid det
+som inte finns`
+  },
+  {
+    title: "",
+    text: `Någon föddes omedelbart i färger
+det svarta molnet skingrades
+du flydde alltid tystnaden
+nu skallar din röst
+som vargarnas ylande
+det dundrar när du lättsamt talar
+lejonet av lust ödmjuk i sin styrka
+kom ihåg vad du ber om
+om bönen är ditt begär
+svagheten omringar jaget
+egot och medvetandet
+alla sfärer av himmelriket
+förskingras i töcknet
+du burit med dig
+i din ruinerade handväska
+om du hjälper Gud
+kommer Gud att hjälpa dig
+om ditt hjärta inte är rent
+penetrera dig med kungens pil
+kungen av pentagram
+och drottningen av nummer 2
+Konsten - skönhetens inre palats
+låter kråkorna fly ditt bröst
+och korparna sätter sig
+på var sida av dina axlar
+ditt jag är bara ett eko
+du kan glömma att du är
+den du tror att du är
+för du är inte fladdermusen i mörkret
+du är en stjärna i dunklet
+alla måste följa denna stjärna
+som du aldrig lyssnat till
+därför är frälsningen
+nästan bortgången
+i denna stenålderns samtid
+ändå, du forsätter att hoppas
+där böner aldrig lyssnas till
+för Gud är ensamhetens barn
+du sitter fast i djävulens garn
+att slåss och fäkta
+tar dig ingenstans
+solen går inte upp
+den är ett bländverk
+kasta dina stenar på din egen spegelbild
+för din armé av ditt sanna jag
+är stenarna i sig självt
+stenarna är dina
+spegelbilden en chimär
+jag lever i havet
+jag bor under ytan
+där korallerna och sjöhästarna
+härjar
+kom ihåg att ljuset
+solen
+Venus
+är bringaren av ljus
+där du sitter i din båt
+guppande på havet
+ser du Polstjärnan
+eller den strålande morgonstjärnan?
+vindarna dansar
+sorg och själsliga trauman
+sveper bort all ångest från dina kinder
+det är allt du vet
+om du verkligen känner det`
+  },
+  {
+    title: "",
+    text: `Allt jag säger nu
+betyder ingenting för dig
+och då har jag redan sagt allt
+orden är så tomma
+att de rymmer en hel ocean
+men jag kan säga att helvetet
+är inget helvete
+man vänjer sig
+det är just det
+som är djävulens akilleshäl
+mina ord är tomma
+för att jag vill ge dig
+något att läsa
+visste ni att spöken
+är rätt tråkiga?
+visste ni att Uriel kom till mig
+och talade till mig
+med sin röst av åska?
+essensen av det mest extremt obegripliga
+bleknade i all sin enkelhet
+och sedan insåg jag
+att jag inte visste någonting längre
+absolut ingenting
+mina ord är tomma
+det är med kärlek jag väljer dem tomma
+jag kommer med ljus och kärlek
+i sin råaste form
+det är allt jag kan göra för dig
+och jag hoppas
+att jag glädjer dig
+håll dig vid liv
+till slutet
+håll dig vid liv
+sök tystnaden
+det finns kunskap
+som blir din börda
+därför varnar jag dig
+med mina tomma ord
+så att jag inte tillför
+någon skada`
+  },
+  {
+    title: "",
+    text: `Tillfredsställda ögon
+röker cigarette under köksfläkten
+sitter vid frontlinjen
+jag känner hennes fel
+men jag kan inte ha dem
+jag är kungen av havsvikens
+sjunkna rike
+trött och tanklös
+vet att det hela har gått förlorat
+så jag ber henne
+att tröttna på min varning
+vi har tillräckligt kvar på fatet
+och en kalk vin
+nattvarden har bara börjat
+du heter disharmonina
+och jag har förlorat förståndet
+sätter en tulpan i din troslinning
+jag hade nyss en vaken dröm
+Wait! They don’t love you
+like I love you!
+vi talar om att förändra allt
+i hela världen
+men det är försent
+en dag kommer vi alla att ligga döda i graven
+som mellan dina ben
+för fem minuter sedan
+det blir en härlig dag
+djävulen kommer att befria oss
+har ingen plats
+har inget hem
+jag stannar tills tulpanen vissnar
+människor som du förändrar sig inte
+så jag visste att vi skulle förlora
+men att själva vägen dit
+är fullt olämplig -
+men berusad av lust -
+ormen krälar i gräset
+bland vattenfyllda
+daggkåpeblad
+vi är smutsiga
+och vi vil ha det så
+som Ouroboros
+biter sin egen svans
+allt vi gör varar för evigt
+så också det här`
+  },
+  {
+    title: "",
+    text: `Jag låter hälsa att
+någon ekar att den älskar mig
+på denna lilla planet
+när inget är kvar
+och vi dunkar våra huvuden
+mot de sista versernas murar
+någon låter hälsa
+att den inte kan se mig
+men att jag lever inuti henne
+som en känsla
+av att jag har varit hos henne förut
+två hjärtan dagar och nätter
+vi leker hänga gubben
+utan motspelare
+säg en bokstav
+säger man till sig själv
+och skriver
+Fenrisulven
+sovandes under körsbärsträdet
+har du min sympati
+Sherry dina ögon gråter
+för du har aldrig
+träffat någon som mig
+och aldrig skall vi ses
+jag vågar inte
+inbilla mig något annat
+sudda runt i drinken
+där du sitter på din barstol
+för tillsammans är den nya ensamheten
+jag vet inte
+om dina ögon är gröna
+svarta eller vita
+om jag någonsin hittar våra fotspår igen
+så skall jag vandra hela vägen
+till Toulouse via Berlin
+tar en cig i morgonljuset
+tänker att jag är redo
+varje dag
+och sen måste jag deala
+med ännu en natt
+och efter drömmens våldsamma inbrott
+måste jag veta mer
+än jag visste igår
+du är den esoteriska öppna boken
+som ligger och slumrar
+på nattduksbordet
+döden är bara slutet
+på det gamla medvetandet
+pengar rinner igenom mina tankar
+snart är dom slut
+jag är den modiga galningen
+mina ögon skall se upp mot himmelen
+jag skall fritera varenda fisk i havet
+och jag skall servera dem
+till de ovärdiga
+hör mitt kall
+hitta till mitt körsbärsträd
+så skall jag hitta till ditt
+förgängligheten
+och tiden talar emot oss
+dörr öppna dig
+annars sparkar jag in dig
+hellre en villfarelse i kärleksdräkt
+än en död dröm
+som ideligen svartnar
+väl medveten om
+att den som skyndar på
+inte kommer särskilt långt
+vi kommer inte längre än så?
+jag sover inte
+jag äter inte
+jag gör inget annat
+än att tänka på oss
+snart är den här jävla gubben
+hängd igen
+jag vet att lusten inte tar oss till himmelen
+men det är lusten jag vill åt
+jag är styrka
+jag är lust
+och nu sjunger en hel kör
+då eftertexten rullar
+på vita duken
+jag har en bläckfisk i min ficka
+som har reinkarnerat sig själv
+och ynglat av sig i tusental
+håll diamanten hårt mot ditt bröst
+mitt hjärta sjunger
+låt den leda dig
+till min hunger
+när du ser detta odjur i vitögat
+och står stadigt
+smälter vi
+och ändrar skepnad
+all smärta borta
+närmare solen
+närmare månen
+närmare
+ta mig hel
+eller lämna mig ifred
+låt mina strövande tankar
+vila i frid`
+  },
+  {
+    title: "",
+    text: `Hur många gånger
+måste jag säga till dig
+att sluta vara framtidens målvakt
+i samtidens sovhytta
+skriver du för robotar
+eller för människan
+där vilar en änglatrumpet
+längs din ryggrad
+det vilar en sjukdom i din själ
+för jag tror inte på hjärnan
+jag tror inte ens på den materiella kroppen
+jag förnekar materian
+helt och hållet
+allt det där som är du och jag
+kommer att överraska oss
+när vi stöter ihop som mjuka stenar
+över den fattiga människan
+som sover vid sin lägereld
+kalla på mitt namn
+när du förvandlats till vatten
+när du regnar
+när du är blodet
+inte när du blöder
+när du är energi
+inte styrka
+släck ditt rum nu
+hur många gånger
+har jag inte sagt till dig
+att din fingrar värker
+för att du spelar för hårt
+det är dags att flyta
+övanför din nakna kropp
+öppna fönstret i ditt ansikte
+och bokhyllorna i ditt bröst
+när du vaknar upp
+är mitt leende
+solsken som bryts
+i dina persienner
+hem är när du tänker på mig
+den här staden
+får dig att känna dig så liten
+men i drömmarnas verklighet
+är du obunden
+ingen kan vara liten
+i oändlighetens gapande sköte
+liten är illusionen
+liten är Vintergatan
+små är de tiotusen tingen
+hur många gånger
+skall jag behöva säga till dig
+att piskrappet som yrde upp damm
+vid din gardin alldeles nyss
+var min skapelse
+du är vid liv
+och jag
+är fortfarande här
+svart på vitt
+I am
+the only one`
+  },
+  {
+    title: "",
+    text: `Så många rastlösa psyken
+fåglar som samlats
+vid mina fötter
+jag sökte härskarnas verklighet
+och jag fann den
+jag såg den
+jag har varit på det berget
+jag har kokat kaffe
+över öppen eld
+gammal i själen
+trasig i hjärtat
+tyckte att jag hörde
+de sjungande manuskripten
+kom sjungande till mig
+kom sjungande till mig
+jag sökte omvändelse
+jag bad i ensamhet
+skönheten är flyktig
+sådan är också själen
+detta lärde jag mig
+du kan förlora din själ
+du ser dödskallar
+med gapande käftar
+och du ser ditt innersta väsen
+explodera i en supernova
+det är vackert
+men det är också slutet
+du min dotter Jungfru, dotter
+det skall aldrig hända dig
+jag skall leda dig på vägen
+tända din lykta
+död eller levande
+räkna med mig
+därför att Matteus 18:18
+frukta inte förstörarna
+be i ensamhet
+var uppriktig
+håll huvudet högt
+som blommor
+vägen öppnar sig
+för den som vägen beträder
+samtidigt som allt fult och smutsigt
+faller som tornet
+tätt bakom dina hälar
+ideligen
+se aldrig tillbaka
+håll blicken skärpt
+allt du behöver är tacksamhet
+och du kommer
+att klara dig
+sök det sanna ljuset
+ställ kluriga frågor till det falska
+rista in ditt svar
+på templet i Delfi
+bara ring mitt namn
+bara ring mitt namn
+jag kommer att finnas där för dig
+alltid är jag här
+och där för dig`
+  },
+  {
+    title: "",
+    text: `Vi pratar inte om
+hur långt det är emellan oss
+det är inte lätt att vara en främling
+bland människor på denna jord
+det är inte lätt att vara ensam
+det är inte lätt
+att vara stilla och mållös
+och det är tröttsamt att vara tyst
+hur seglar vi på tidens vågor?
+Livet tog en evighet
+när du var ett litet barn
+idag tycks allting rusa oss mot döden
+jag minns mina mammas blåa ögon
+som speglade havet om sommaren
+hennes aska spridd över korallrevet
+låt oss glömma all smärta
+natten kan inte gömma
+mina barnskrik
+i mina drömmar
+av bortgången tid
+det fanns en tid före oss
+vi hade varit döda i oräknelig tid
+och det gav oss aldrig
+någon smärta
+och nu allt detta
+min syster sväljer
+en näve av raseri
+våra ögon är rotlösa
+och förvirrade
+åren tar och du ropar i mörkret
+främmande tungor svarar
+livet är ett ladugårdshus
+snart går vi med ryggarna krökta
+och visslar oberörda
+för vi insåg att det var absolut nödvändigt
+att tro på ingenting
+Laxen vandrar i vattenfallet
+viskningarna i skogarna
+bryter plötsligt all tystnad
+vi burit omkring på i det vilda
+främmande
+tungor på jorden
+främmande tungor
+i jorden
+
+ta oss tillbaka
+
+nu!`
+  },
+  {
+    title: "",
+    text: `Allt som finns kvar av mig
+är allt som jag döljer
+månaden börjar ta slut i min kalender
+vart skall jag ta vägen nu?
+Jag har ritat ett kryss
+över varje dag
+dag för dag
+Jag kan se sorgen i mina ögon
+jag kan alla ord
+men jag har inte lärt mig sången
+jag är din
+bara din
+ät mig sist
+och håll om mig
+för evigt
+var så god
+du har hittat mig
+du har fångat mig
+sluta aldrig att se dig omkring
+jag kommer snart från sorgen
+förlorad
+och jag vet att jag har
+allt att vinna
+jag vet att du har saknat mig
+i hela ditt liv
+och jag dig
+vikten på våra axlar lättar
+det ögonblick vi söker
+kommer
+om vi ger det lite tid
+när du vaknar upp
+kommer du att finna mig
+jag känner redan nu
+att jag aldrig
+kommer att lämna dig
+lika närvarande i frånvaro
+som i närvaro
+vi är så hänförda
+vi kan bara inte dölja det
+vi håller på att släppa allt
+och jag tror att vi gillar det
+Jag vet
+att jag vill ha dig
+men jag tror att du redan
+har lämnat mig
+bubblan brast
+när du insåg
+att du verkligen var
+älskad
+
+*`
+  },
+  {
+    title: "",
+    text: `Nåväl
+
+jag älskar inte längre
+att ströva omkring
+men gå utan mål
+det gör jag
+jag är impregnerad av dagdrömmeri
+förströelse och fantasier
+jag sträcker på mina ben
+i sjukhussängen
+vart skall min eskapism ta mig idag?
+jag hör fläktsystemets tysta sus
+rumskamratens snarkande
+jag lyssnar på musik
+om du bara visste vad du betyder för mig
+om du bara visste att det är just dig
+jag åsyftar
+och vilket outsägligt misstag
+det vore om du fortsätter
+att avvisa mina meddelanden
+ljuset i min klocka brinner
+regnbågens färger
+skimmrar i mitt ansikte
+när jag dräneras av mörker
+och tröstlöshet
+då jag saknar dig
+vankar jag av och an
+sorglig och bitterljuv är tanken
+på livet med dig
+som så brådstörtat försvann
+jag älskar dig till månen
+och tillbaka
+pappa
+denna mening är allt
+jag har kvar av dig
+men jag tar hela universum till dig
+du håller om mig
+jag har dig i min famn
+du vet va Cornelis sa
+innan han tog ambulansen till månen
+och försvann?
+Han sa
+Häst utan tyglar
+som vägen minns
+ta mig till landet
+som inte finns
+dåraktig har jag varit
+och bångstyrig är jag
+men i mitt bröst brinner
+den renaste av eldar
+du saknas mig
+Ronja
+min rövardotter
+när de kommer från skogen
+hämtar jag mitt gevär
+och går i döden för dig
+om de kommer från skogen
+med tunga skor
+ring mig jag är ditt hem
+jag kommer alltid vara ditt hem
+
+Cassiopeja
+
+stjärnorna de fem
+
+har inte haft en dröm
+på mycket länge
+
+för jag väntar
+
+jag väntar`
+  },
+  {
+    title: "",
+    text: `Hur många år har du glömt
+du trodde aldrig
+att du skulle komma hit
+till tystnaden
+till ingenting -
+till ingen så kraftfull
+som den som aldrig vågade
+uttala ditt namn -
+du trodde att du skulle vakna
+i samma säng
+i resten av ditt liv
+tills alla rester försvann
+och allt liv porlade ner i brunnen
+och öppnade ditt ensamma hjärta
+du är vad du aldrig skulle bli
+fri - nästan dödligt livrädd
+utan kompass utan karta
+bara utslitna vinylskivor
+i en back
+Flamman i din mun
+spiller söta tårar
+på dina desperata kinder
+baby du kunde ha dött
+men du är ännu vid liv
+du sade sanningen
+fast du hade möjlighet att ljuga
+Natten var kall
+och vinden blåste bort
+dina bekymmer
+för du hade någon berättelse
+som nu bleknat bort
+vilken väg skall du nu beträda
+vilket blod skall vi dela
+akta dig så inte sjukhusets ångvält
+plöjer dig platt
+eller gör segel av ditt skinn
+och seglar dig
+på otillräckligt hav
+två glas i dina händer
+från samma hytta
+från samma svunna tid
+från samma glasmästare
+Snöflingor i luften
+yr omkring dig
+dina ögon och frusna fötter snabba
+din kropp känner
+inte längre till sin egen mark
+när havets hjältinna talar
+då är alla tysta
+och tyst ska du vara
+när solen träffar dina ansikten
+och vänder dig
+ut och in på
+Du måste bära dig själv
+den här gången
+alla andra är döda
+alla andra är döda`
+  },
+  {
+    title: "",
+    text: `Välkommen hem
+du är välkommen hem
+du är välkommen hem
+ingen behöver fråga
+var du varit
+eller vad du burit med dig
+det finns inget prov
+du måste klara
+ingen historia
+du måste förklara
+du får komma som du är
+med allt som ännu saknar namn
+du är välkommen hem
+du är välkommen hem`
+  }
+];
+/* ====================== SLUT PÅ MALLEN ====================== */
+
+const cover = document.getElementById('cover');
+const poemSec = document.getElementById('poem');
+const wrap = document.getElementById('wrap');
+let current = -1;
+
+function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+function toTop() {
+  const go = () => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
+  go();
+  requestAnimationFrame(() => { go(); setTimeout(go, 60); });
+}
+
+function show(i) {
+  current = i;
+  const bg = i < 0 ? '#ffffff' : '#000000';
+  document.documentElement.style.background = bg;
+  document.body.style.background = bg;
+  if (i < 0) {
+    poemSec.style.display = 'none';
+    cover.style.display = 'flex';
+    toTop();
+    return;
+  }
+  const p = POEMS[i];
+  const last = i === POEMS.length - 1;
+  const stanzas = p.text.trim().split(/\n\s*\n/).map(s => '<p>' + esc(s) + '</p>').join('');
+  wrap.innerHTML =
+    '<div class="num block">' + (i + 1) + ' / ' + POEMS.length + '</div>' +
+    (p.title ? '<h2 class="ptitle block">' + esc(p.title) + '</h2>' : '') +
+    '<div class="text">' + stanzas + '</div>' +
+    '<button class="next block" id="nextBtn">' + (last ? 'Slut' : 'Nästa') + '</button>';
+  cover.style.display = 'none';
+  poemSec.style.display = 'block';
+  toTop();
+  document.getElementById('nextBtn').onclick = () => show(last ? -1 : i + 1);
+}
+
+cover.addEventListener('click', () => show(0));
+</script>
+</body>
+</html>
